@@ -1,0 +1,42 @@
+{
+  "name": "virtualweb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "db:create": "npx sequelize db:create",
+    "db:migrate": "npx sequelize db:migrate",
+    "db:create:development": "NODE_ENV=development npm run db:create",
+    "db:create:test": "NODE_ENV=test npm run db:create",
+    "db:migrate:development": "NODE_ENV=development npx sequelize db:migrate",
+    "db:migrate:test": "NODE_ENV=test npx sequelize db:migrate",
+    "db:seed:development": "NODE_ENV=development npx sequelize db:seed:all",
+    "db:seed:test": "NODE_ENV=test npx sequelize db:seed:all",
+    "dev": "NODE_ENV=development npx nodemon bin/http.js",
+    "test": "NODE_ENV=test npx jest",
+    "start": "node bin/http.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/virtualweb-id/virtualweb.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/virtualweb-id/virtualweb/issues"
+  },
+  "homepage": "https://github.com/virtualweb-id/virtualweb#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jest": "^26.6.3",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.5.1",
+    "sequelize": "^6.5.0",
+    "sequelize-cli": "^6.2.0",
+    "supertest": "^6.1.3"
+  }
+}
