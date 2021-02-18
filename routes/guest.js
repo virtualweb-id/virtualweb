@@ -1,10 +1,10 @@
 const router = require('express').Router()
 const GuestController = require('../controllers/guestController')
 
-router.get('/guests', GuestController.findAll)
-router.get('/guests/:id', GuestController.findById)
-router.post('/guests', GuestController.create)
-router.put('/guests/:id', GuestController.edit)
-router.delete('/guests/:id', GuestController.delete)
+router.post('/', GuestController.create)
+router.get('/', GuestController.findAll)
+router.get('/:id', GuestController.findById)
+router.put('/:id', GuestController.edit)
+router.delete('/:id', GuestController.delete)
 
 module.exports = router
