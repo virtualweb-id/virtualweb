@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const GuestController = require('../controllers/guestController')
+const GuestController = require('../controllers/GuestController')
 
 router.post('/', GuestController.create)
 router.get('/', GuestController.findAll)

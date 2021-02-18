@@ -33,6 +33,7 @@ class GuestController {
 
     static create (req, res, next) {
         const {name, email, phoneNumber, WeddingId} = req.body
+        console.log(req.body)
         Guest.create({name, email, phoneNumber, WeddingId})
           .then(guest => {
             const {id, name, email, phoneNumber, WeddingId} = guest
