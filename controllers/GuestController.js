@@ -21,10 +21,10 @@ class GuestController {
     }
 
     static findById (req, res, next) {
-        Guest.findByPk(+req.params.id)
+        const { id } = req.params
+        Guest.findByPk(id)
         .then(guest => {
-            const {id, name, email, phoneNumber, WeddingId} = guest
-            res.status(200).json({id, name, email, phoneNumber, WeddingId})
+            res.status(200).json(guest)
         })
         .catch(err => {
             next(err)})
@@ -33,11 +33,9 @@ class GuestController {
 
     static create (req, res, next) {
         const {name, email, phoneNumber, WeddingId} = req.body
-        console.log(req.body)
         Guest.create({name, email, phoneNumber, WeddingId})
           .then(guest => {
-            const {id, name, email, phoneNumber, WeddingId} = guest
-            res.status(201).json({id, name, email, phoneNumber, WeddingId})
+            res.status(201).json(guest)
           })
           .catch(err => {
             next(err)
