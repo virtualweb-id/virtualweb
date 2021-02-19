@@ -26,7 +26,7 @@ class WeddingController {
         brideName: brideName || '',
         groomImg: groomImg || '',
         brideImg: brideImg || '',
-        status: status || '',
+        status: status || false,
         UserId
       }
       const createWedding = await Wedding.create(newData)
