@@ -26,8 +26,8 @@ class WeddingController {
         brideName: brideName || '',
         groomImg: groomImg || '',
         brideImg: brideImg || '',
-        status: status,
-        UserId: UserId || ''
+        status: status || false,
+        UserId
       }
       const createWedding = await Wedding.create(newData)
       if (createWedding) await Invitation.create({ WeddingId: createWedding.id })
