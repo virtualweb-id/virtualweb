@@ -1,12 +1,13 @@
-const { Comment } = require('../models')
+const { Comment, Wedding } = require('../models')
 
 class CommentController {
   static async findAll (req, res, next) {
     try {
       const UserId = req.user.id
+      const { id: WeddingId } = await Wedding.findByPk(UserId)
       const comments = await Comment.findAll({
         order: [['createdAt', 'DESC']],
-        where: { UserId }
+        where: { WeddingId }
       })
       res.status(200).json(comments)
     } catch (err) {
@@ -16,13 +17,12 @@ class CommentController {
 
   static async create (req, res, next) {
     try {
-      const UserId = req.user.id
-      const { name, relationship, message } = req.body
+      const { name, relationship, message, WeddingId } = req.body
       const comment = await Comment.create({
         name: name || '', 
         relationship: relationship || '', 
         message: message || '', 
-        UserId
+        WeddingId
       })
       res.status(201).json(comment)
     } catch (err) {

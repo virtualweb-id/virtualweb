@@ -17,10 +17,10 @@ module.exports = {
       message: {
         type: Sequelize.STRING
       },
-      UserId: {
+      WeddingId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Users',
+          model: 'Weddings',
           key: "id"
         },
         onDelete: 'cascade',
