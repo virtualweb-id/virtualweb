@@ -3,47 +3,53 @@ const { comparePwd } = require('../helpers/bcrypt')
 const { generateToken } = require('../helpers/jwt')
 
 class UserController {
-  static register(req, res, next) {
-    const { name, email, password, phoneNumber } = req.body
-    const newUser = { name, email, password, phoneNumber }
+  static async register(req, res, next) {
+    try {
+      const { name, email, password, phoneNumber } = req.body
 
-    User.create(newUser)
-      .then(user => {
-        return res.status(201).json({
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          phoneNumber: user.phoneNumber
-        })
+      const user = await User.create({
+        name: name || '',
+        email: email || '',
+        password: password || '',
+        phoneNumber: phoneNumber || ''
       })
-      .catch(err => {
-        next(err)
+      res.status(201).json({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phoneNumber: user.phoneNumber
       })
+    } catch (err) {
+      next(err)
+    }
   }
 
-  static login(req, res, next) {
-    const { email, password } = req.body
-    
-    if (!email || !password) return next({ name: 'InvalidPassOrEmail' })
+  static async login(req, res, next) {
+    try {
+      const { email, password } = req.body
+      if (!email || !password) return next({ name: 'InvalidPassOrEmail' })
 
-    User.findOne({ where: {email} })
-      .then(user => {
-        if (!user) {
+      const user = await User.findOne({ where: {email} })
+      if (!user) {
+        next({ name: 'InvalidPassOrEmail' })
+      } else {
+        const isMatching = comparePwd(password, user.password)
+        if (!isMatching) {
           next({ name: 'InvalidPassOrEmail' })
         } else {
-          const isMatching = comparePwd(password, user.password)
-          if (!isMatching) {
-            next({ name: 'InvalidPassOrEmail' })
-          } else {
-            const payload = { id: user.id, email: user.email }
-            const access_token = generateToken(payload)
-            res.status(200).json({ access_token })
-          }
+          const payload = { id: user.id, email: user.email }
+          const access_token = generateToken(payload)
+          res.status(200).json({ 
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            access_token 
+          })
         }
-      })
-      .catch(err => {
-        next(err)
-      })
+      }
+    } catch (err) {
+      next(err)
+    }
   }
 }
 
