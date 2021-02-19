@@ -1,8 +1,10 @@
 const router = require('express').Router()
-const guest = require('./guest')
-const authRouter = require('./auth')
+const guest = require('./guestRoute')
+const wedding = require('./weddingRoute')
+const user = require('./userRoute')
 
-router.use('/', authRouter)
+router.use('/', user)
 router.use('/guests', guest)
+router.use('/wedding', wedding)
 
 module.exports = router

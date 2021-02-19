@@ -2,7 +2,7 @@
   "name": "virtualweb",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "db:create": "npx sequelize db:create",
     "db:migrate": "npx sequelize db:migrate",
