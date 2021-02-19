@@ -17,14 +17,8 @@ module.exports = {
       phoneNumber: {
         type: Sequelize.STRING
       },
-      WeddingId: {
+      UserId: {
         type: Sequelize.INTEGER,
-        references: {
-          model: 'Weddings',
-          key: "id"
-        },
-        onDelete: 'cascade',
-        onUPdate: 'cascade'
       },
       createdAt: {
         allowNull: false,

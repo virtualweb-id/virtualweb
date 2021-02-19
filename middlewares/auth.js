@@ -1,5 +1,5 @@
 const { verifyToken } = require('../helpers/jwt')
-const { User } = require('../models')
+const { User, Guest, Wedding } = require('../models')
 
 async function authentication(req, res, next) {
   try {
@@ -8,7 +8,7 @@ async function authentication(req, res, next) {
       where: { email: decoded.email }
     })
     if (!user) {
-      next({ name: 'accessDenied' })
+      next({ name: 'ErrorAuthenticate' })
     } else {
       req.user = { id: user.id, email: user.email }
       next()
@@ -18,4 +18,46 @@ async function authentication(req, res, next) {
   }
 }
 
-module.exports = { authentication }
+const authorizeGuest = async (req,res,next) => {
+  try {
+    const { id } = req.params
+    const UserId = req.user.id
+    const guest = await Guest.findOne({
+      where: {id}
+    })
+    if(guest){
+      if(UserId == guest.UserId){
+        next()
+      }else{
+        next({name: 'ErrorAuthorize'})
+      }
+    }else{
+      next({name: 'ErrorNotFound'})
+    }
+  } catch (err) {
+    next(err)
+  }
+}
+
+const authorizeWedding = async (req,res,next) => {
+  try {
+    const { id } = req.params
+    const UserId = req.user.id
+    const wedding = await Wedding.findOne({
+      where: {id}
+    })
+    if(wedding){
+      if(UserId == wedding.UserId){
+        next()
+      }else{
+        next({name: 'ErrorAuthorize'})
+      }
+    }else{
+      next({name: 'ErrorNotFound'})
+    }
+  } catch (err) {
+    next(err)
+  }
+}
+
+module.exports = { authentication, authorizeGuest, authorizeWedding }

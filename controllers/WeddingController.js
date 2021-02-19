@@ -3,9 +3,9 @@ const { Wedding } = require('../models')
 class WeddingController {
   static async getWeddingInfoById(req, res, next) {
     try {
-      const { id } = req.user
-      const data = await Wedding.findByPk(id)
-      res.status(200).json(data)
+      const UserId = req.user.id
+      const data = await Wedding.findByPk(UserId)
+      res.status(200).json(data || {})
     } catch (error) {
       next(error)
     }
@@ -13,18 +13,20 @@ class WeddingController {
 
   static async createWeddingPlan(req, res, next) {
     try {
+      const UserId = req.user.id
+      const { title, date, address, groomName, groomImg, brideImg, brideName, status } = req.body
       const newData = {
-        title: req.body.title,
-        date: req.body.date,
-        address: req.body.address,
-        groomName: req.body.groomName,
-        brideName: req.body.brideName,
-        groomImg: req.body.groomImg,
-        brideImg: req.body.brideImg,
-        status: req.body.status,
-        UserId: req.user.id
+        title: title || '',
+        date: date || '',
+        address: address || '',
+        groomName: groomName || '',
+        brideName: brideName || '',
+        groomImg: groomImg || '',
+        brideImg: brideImg || '',
+        status: status || '',
+        UserId
       }
-      const createWedding = Wedding.create(newData)
+      const createWedding = await Wedding.create(newData)
       res.status(201).json(createWedding)
     } catch (error) {
       next(error)
@@ -33,16 +35,17 @@ class WeddingController {
 
   static async updateWeddingInfo(req, res, next) {
     try {
-      const { id } = req.user
+      const { id } = req.params
+      const { title, date, address, groomName, groomImg, brideImg, brideName, status } = req.body
       const editData = {
-        title: req.body.title,
-        date: req.body.date,
-        address: req.body.address,
-        groomName: req.body.groomName,
-        brideName: req.body.brideName,
-        groomImg: req.body.groomImg,
-        brideImg: req.body.brideImg,
-        status: req.body.status
+        title: title || '',
+        date: date || '',
+        address: address || '',
+        groomName: groomName || '',
+        brideName: brideName || '',
+        groomImg: groomImg || '',
+        brideImg: brideImg || '',
+        status: status || ''
       }
       const editedData = await Wedding.update(editData, {
         where: { id }, returning: true
