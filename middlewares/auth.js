@@ -1,5 +1,5 @@
 const { verifyToken } = require('../helpers/jwt')
-const { User, Guest } = require('../models')
+const { User, Guest, Wedding } = require('../models')
 
 async function authentication(req, res, next) {
   try {
@@ -39,4 +39,25 @@ const authorizeGuest = async (req,res,next) => {
   }
 }
 
-module.exports = { authentication, authorizeGuest }
+const authorizeWedding = async (req,res,next) => {
+  try {
+    const { id } = req.params
+    const UserId = req.user.id
+    const wedding = await Wedding.findOne({
+      where: {id}
+    })
+    if(wedding){
+      if(UserId == wedding.UserId){
+        next()
+      }else{
+        next({name: 'ErrorAuthorize'})
+      }
+    }else{
+      next({name: 'ErrorNotFound'})
+    }
+  } catch (err) {
+    next(err)
+  }
+}
+
+module.exports = { authentication, authorizeGuest, authorizeWedding }
