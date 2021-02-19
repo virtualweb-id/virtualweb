@@ -15,7 +15,7 @@ const userTest = {
 }
 
 beforeAll(done => {
-  queryInterface.bulkInsert('Users', [ userTest ], { returning: true })
+  queryInterface.bulkInsert('Users', [ userTest ])
     .then(() => done())
     .catch(err => done(err))
 })

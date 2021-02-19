@@ -30,9 +30,10 @@ class WeddingController {
         UserId
       }
       const createWedding = await Wedding.create(newData)
-      if(createWedding) Invitation.create({ WeddingId: createWedding.id })
+      if (createWedding) await Invitation.create({ WeddingId: createWedding.id })
       res.status(201).json(createWedding)
     } catch (error) {
+      console.log(error)
       next(error)
     }
   }

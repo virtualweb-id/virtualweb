@@ -13,5 +13,4 @@ router.use('/weddings', weddingRouter)
 router.use('/invitations', invitationRouter)
 router.use('/comments', commentRouter)
 
-
 module.exports = router
