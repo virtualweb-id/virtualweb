@@ -20,7 +20,7 @@ const errorHandler = (err,req,res,next) => {
       case "ErrorAuthenticate":
         objErr(401, 'you need to login first')
         break;
-      case "accessDenied":
+      case "ErrorAuthorize":
         objErr(403, 'you dont have access')
         break;
       case "SequelizeForeignKeyConstraintError": 
