@@ -17,6 +17,9 @@ module.exports = {
       phoneNumber: {
         type: Sequelize.STRING
       },
+      status: {
+        type: Sequelize.BOOLEAN
+      },
       UserId: {
         type: Sequelize.INTEGER,
       },

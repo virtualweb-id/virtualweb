@@ -26,6 +26,109 @@ afterAll(done => {
     .catch(err => done(err))
 })
 
+describe('POST /register', () => {
+  test('Case 1: Success sign up', done => {
+    request(app)
+      .post('/register')
+      .send({ name: 'Shizuka', email: 'shizukamu@mail.com', password: hashPwd('nobitaku'), phoneNumber: '27222222' })
+      .end((err, res) => {
+        const { body, status } = res
+        if (err) return done(err)
+        expect(status).toBe(201)
+        expect(body).toHaveProperty('id', expect.any(Number))
+        expect(body).toHaveProperty('name', 'Shizuka')
+        expect(body).toHaveProperty('email', 'shizukamu@mail.com')
+        expect(body).toHaveProperty('phoneNumber', '27222222')
+        done()
+      })
+  })
+
+  test('Case 2: Blank name', done => {
+    request(app)
+      .post('/register')
+      .send({ name: '', email: 'shizukamu@mail.com', password: hashPwd('nobitaku'), phoneNumber: '27222222' })
+      .end((err, res) => {
+        const { body, status } = res
+        if (err) return done(err)
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'SequelizeValidationError')
+        expect(body).toHaveProperty('message', ['Name is required'])
+        done()
+      })
+  })
+
+  test('Case 3: Blank email', done => {
+    request(app)
+      .post('/register')
+      .send({ name: 'Shizuka', email: '', password: hashPwd('nobitaku'), phoneNumber: '27222222' })
+      .end((err, res) => {
+        const { body, status } = res
+        if (err) return done(err)
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'SequelizeValidationError')
+        expect(body.message).toEqual(expect.arrayContaining([
+          'Email/password is not valid',
+          'Email is required'
+        ]))
+        done()
+      })
+  })
+
+  test('Case 4: Blank password', done => {
+    request(app)
+      .post('/register')
+      .send({ name: 'Shizuka', email: 'shizukamu@mail.com', password: '', phoneNumber: '27222222' })
+      .end((err, res) => {
+        const { body, status } = res
+        if (err) return done(err)
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'SequelizeValidationError')
+        expect(body.message).toEqual(expect.arrayContaining([
+          'Password must be at least 5 characters',
+          'Password is required'
+        ]))
+        done()
+      })
+  })
+
+  test('Case 5: Blank phone number', done => {
+    request(app)
+      .post('/register')
+      .send({ name: 'Shizuka', email: 'shizukamu@mail.com', password: hashPwd('nobitaku'), phoneNumber: '' })
+      .end((err, res) => {
+        const { body, status } = res
+        if (err) return done(err)
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'SequelizeValidationError')
+        expect(body.message).toEqual(expect.arrayContaining([ 'Phone number is required' ]))
+        done()
+      })
+  })
+
+  test('Case 6: Blank name, email, password, & phone number', done => {
+    request(app)
+      .post('/register')
+      .end((err, res) => {
+        const { body, status } = res
+        if (err) return done(err)
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'SequelizeValidationError')
+        expect(body.message).toEqual(expect.arrayContaining([
+          'Name is required',
+          'Email is required',
+          'Password is required',
+          'Phone number is required'
+        ]))
+        done()
+      })
+  })
+})
+
 describe('POST /login', () => {
   test('Case 1: Success sign in', done => {
     request(app)
