@@ -18,6 +18,7 @@ class WeddingController {
       const UserId = req.user.id
       const { title, date, address, groomName, groomImg, brideImg, brideName, status } = req.body
       const newData = {
+        id: Math.random() * 10e8 | 0,
         title: title || '',
         date: date || '',
         address: address || '',
