@@ -1,67 +1,73 @@
-const {Guest} = require('../models')
+const { Guest , Wedding} = require('../models')
 
 class GuestController {
-    static findAll (req, res, next) {
-        Guest.findAll({order: [['createdAt', 'DESC']]})
-        .then((guests) => {
-            let output = guests.map(el => {
-                return {
-                    id: el.id,
-                    name: el.name,
-                    email: el.email,
-                    phoneNumber: el.phoneNumber,
-                    WeddingId: el.WeddingId
-                }
-            })
-            res.status(200).json(output)
-        })
-        .catch(err => {
-            next(err)
-        })
+  static async findAll (req, res, next) {
+    try {
+      const UserId = req.user.id
+      const guests = await Guest.findAll({
+        order: [['createdAt', 'DESC']],
+        where: { UserId }
+      })
+      res.status(200).json(guests)
+    } catch (err) {
+      next(err)
     }
+  }
 
-    static findById (req, res, next) {
-        const { id } = req.params
-        Guest.findByPk(id)
-        .then(guest => {
-            res.status(200).json(guest)
-        })
-        .catch(err => {
-            next(err)})
-        
+  static async findById (req, res, next) {
+    try {
+      const { id } = req.params
+      const guest = await Guest.findByPk(id)
+      res.status(200).json(guest)
+    } catch (err) {
+      next(err)
+    }        
+  }
+
+  static async create (req, res, next) {
+    try {
+      const UserId = req.user.id
+      const { name, email, phoneNumber } = req.body
+      const guest = await Guest.create({
+        name: name || '', 
+        email: email || '', 
+        phoneNumber: phoneNumber || '', 
+        UserId
+      })
+      res.status(201).json(guest)
+    } catch (err) {
+      next(err)
     }
+  }
 
-    static create (req, res, next) {
-        const {name, email, phoneNumber, WeddingId} = req.body
-        Guest.create({name, email, phoneNumber, WeddingId})
-          .then(guest => {
-            res.status(201).json(guest)
-          })
-          .catch(err => {
-            next(err)
-          })
+  static async edit (req, res, next) {
+    try {
+      const { id } = req.params
+      const { name, email, phoneNumber } = req.body
+      const guest = await Guest.update({
+        name: name || '', 
+        email: email || '', 
+        phoneNumber: phoneNumber || '',
+      }, {
+        where: {id},
+        returning: true
+      })
+      res.status(200).json(guest[1][0])
+    } catch (err) {
+      console.log(err);
+      next(err)
     }
+  }
 
-    static edit (req, res, next) {
-        const {name, email, phoneNumber, WeddingId} = req.body
-        Guest.update({name, email, phoneNumber, WeddingId}, {where: {id: +req.params.id}})
-          .then(guest => {
-            res.status(200).json({message: "edit guest successfull"})
-          })
-          .catch(err => {
-            next(err)
-          })
-        
+  static async delete (req, res, next) {
+    try {
+      const { id } = req.params
+      await Guest.destroy({where: {id}})
+      res.status(200).json({message: 'delete guest successfull'})
+    } catch (err) {
+      next(err)
     }
-
-    static delete (req, res, next) {
-        Guest.destroy({where: {id: +req.params.id}})
-        .then(data => {
-            res.status(200).json({message: 'delete guest successfull'})
-        })
-        .catch(err => next(err))
-    }
-
+  }
 }
 
 module.exports = GuestController
