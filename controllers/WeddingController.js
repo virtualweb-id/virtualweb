@@ -1,4 +1,4 @@
-const { Wedding } = require('../models')
+const { Wedding, Invitation } = require('../models')
 
 class WeddingController {
   static async getWeddingInfoById(req, res, next) {
@@ -27,6 +27,7 @@ class WeddingController {
         UserId
       }
       const createWedding = await Wedding.create(newData)
+      if(createWedding) Invitation.create({ WeddingId: createWedding.id })
       res.status(201).json(createWedding)
     } catch (error) {
       next(error)
