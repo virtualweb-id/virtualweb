@@ -1,4 +1,5 @@
 const { Wedding, Invitation } = require('../models')
+const cloudinary = require('../helpers/cloudinary')
 
 class InvitationController {
   static async showOne(req, res, next) {
@@ -21,13 +22,17 @@ class InvitationController {
         videoUrl, backgroundColor, textColor, 
         timeEvent1, timeEvent2, youtubeUrl 
       } = req.body
+      const uploadResponseBackgroundImg = await cloudinary.uploader
+      .upload(backgroundImg)
+      const uploadResponseAdditionalImg = await cloudinary.uploader
+      .upload(additionalImg)
       const input = { 
         brigeNickname: brigeNickname || '', 
         groomNickname: groomNickname || '', 
         story: story || '', 
         title: title || '', 
-        backgroundImg: backgroundImg || '', 
-        additionalImg: additionalImg || '', 
+        backgroundImg: uploadResponseBackgroundImg.url || '', 
+        additionalImg: uploadResponseAdditionalImg.url || '', 
         videoUrl: videoUrl || '', 
         backgroundColor: backgroundColor || '', 
         textColor: textColor || '', 
