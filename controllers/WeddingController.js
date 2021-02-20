@@ -38,7 +38,6 @@ class WeddingController {
       if (createWedding) await Invitation.create({ WeddingId: createWedding.id })
       res.status(201).json(createWedding)
     } catch (error) {
-      console.log(error)
       next(error)
     }
   }
@@ -57,9 +56,9 @@ class WeddingController {
         address: address || '',
         groomName: groomName || '',
         brideName: brideName || '',
-        groomImg: uploadResponseGroom.url || '',
-        brideImg: uploadResponseBride.url || '',
-        status: status || ''
+        groomImg: groomImg || '',
+        brideImg: brideImg || '',
+        status: status || false
       }
       const editedData = await Wedding.update(editData, {
         where: { id }, returning: true

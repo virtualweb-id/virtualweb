@@ -78,7 +78,7 @@ class GuestController {
     try {
       const { id } = req.params
       await Guest.destroy({where: {id}})
-      res.status(200).json({message: 'delete guest successfull'})
+      res.status(200).json({message: 'Delete guest successful'})
     } catch (err) {
       next(err)
     }

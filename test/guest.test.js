@@ -14,9 +14,9 @@ const userTest = {
   createdAt: new Date(),
   updatedAt: new Date()
 }
-let otherUserTest = {
-  name: 'Suneo',
-  email: 'suneomu@mail.com',
+const otherUserTest = {
+  name: 'Shizuka',
+  email: 'shizukamu@mail.com',
   password: hashPwd(passTest),
   phoneNumber: '27222222',
   createdAt: new Date(),
@@ -35,14 +35,19 @@ let addWeddingTest = {
   createdAt: new Date(),
   updatedAt: new Date()
 }
-let addOtherWeddingTest = {
-  title: 'Suneo & Maimunah',
-  date: '2021-02-28',
-  address: 'Tokyo',
-  groomName: 'Suneo',
-  brideName: 'Maimunah',
-  groomImg: 'img_url',
-  brideImg: 'img_url',
+let addGuestTest = {
+  name: 'Giant', 
+  email: 'giantgendut@mail.com', 
+  phoneNumber: '081289272900',
+  status: false,
+  UserId: 0,
+  createdAt: new Date(),
+  updatedAt: new Date()
+}
+let addOtherGuestTest = {
+  name: 'Giant', 
+  email: 'giantgendut@mail.com', 
+  phoneNumber: '081289272900',
   status: false,
   UserId: 0,
   createdAt: new Date(),
@@ -50,8 +55,9 @@ let addOtherWeddingTest = {
 }
 let access_token
 let wrong_access_token
+let idGuest
+let wrong_idGuest
 let idWeds
-let wrong_idWeds
 
 beforeAll(done => {
   queryInterface.bulkInsert('Users', [userTest], { returning: true })
@@ -64,14 +70,19 @@ beforeAll(done => {
     })
     .then(weddings => {
       idWeds = weddings[0].id
+      addGuestTest.UserId = weddings[0].UserId
+      return queryInterface.bulkInsert('Guests', [addGuestTest], { returning: true })
+    })
+    .then(guests => {
+      idGuest = guests[0].id
       return queryInterface.bulkInsert('Users', [ otherUserTest ], { returning: true })
     })
     .then(othUser => {
-      addOtherWeddingTest.UserId = othUser[0].id
-      return queryInterface.bulkInsert('Weddings', [ addOtherWeddingTest ], { returning: true })
+      addOtherGuestTest.UserId = othUser[0].id
+      return queryInterface.bulkInsert('Guests', [addOtherGuestTest], { returning: true })
     })
-    .then(othWeds => {
-      wrong_idWeds = othWeds[0].id
+    .then(othGuest => {
+      wrong_idGuest = othGuest[0].id
       done()
     })
     .catch(err => done(err))
@@ -83,43 +94,33 @@ afterAll(done => {
     .catch(err => done(err))
 })
 
-describe('POST /weddings', () => {
-  test('Case 1: Create wedding plan', done => {
+describe('POST /guest', () => {
+  test('Case 1: Success add guest to the wedding', done => {
     request(app)
-      .post('/weddings')
+      .post('/guests')
       .set('access_token', access_token)
       .send({
-        title: 'Nobita & Shizuka',
-        date: '2021-02-26',
-        address: 'Kyoto',
-        groomName: 'Nobita',
-        brideName: 'Shizuka',
-        groomImg: 'img_url',
-        brideImg: 'img_url',
-        status: false
+        name: 'Giant', 
+        email: 'giantgendut@mail.com', 
+        phoneNumber: '081289272900'
       })
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
         expect(status).toBe(201)
-        expect(body).toHaveProperty('groomName', 'Nobita')
+        expect(body).toHaveProperty('name', 'Giant')
         done()
       })
   })
 
   test('Case 2: Wrong access token', done => {
     request(app)
-      .post('/weddings')
+      .post('/guests')
       .set('access_token', wrong_access_token)
       .send({
-        title: 'Nobita & Shizuka',
-        date: '2021-02-26',
-        address: 'Kyoto',
-        groomName: 'Nobita',
-        brideName: 'Shizuka',
-        groomImg: 'img_url',
-        brideImg: 'img_url',
-        status: false
+        name: 'Giant', 
+        email: 'giantgendut@mail.com', 
+        phoneNumber: '081289272900'
       })
       .end((err, res) => {
         if (err) return done(err)
@@ -132,18 +133,13 @@ describe('POST /weddings', () => {
       })
   })
 
-  test(`Case 3: Don't have access token, so can't have User ID`, done => {
+  test(`Case 3: Don't have access token`, done => {
     request(app)
-      .post('/weddings')
+      .post('/guests')
       .send({
-        title: 'Nobita & Shizuka',
-        date: '2021-02-26',
-        address: 'Kyoto',
-        groomName: 'Nobita',
-        brideName: 'Shizuka',
-        groomImg: 'img_url',
-        brideImg: 'img_url',
-        status: false
+        name: 'Giant', 
+        email: 'giantgendut@mail.com', 
+        phoneNumber: '081289272900'
       })
       .end((err, res) => {
         if (err) return done(err)
@@ -156,19 +152,14 @@ describe('POST /weddings', () => {
       })
   })
 
-  test('Case 4: Bad request; blank title', done => {
+  test('Case 4: Bad request: blank name', done => {
     request(app)
-      .post('/weddings')
+      .post('/guests')
       .set('access_token', access_token)
       .send({
-        title: '',
-        date: '2021-02-26',
-        address: 'Kyoto',
-        groomName: 'Nobita',
-        brideName: 'Shizuka',
-        groomImg: 'img_url',
-        brideImg: 'img_url',
-        status: false
+        name: '', 
+        email: 'giantgendut@mail.com', 
+        phoneNumber: '081289272900'
       })
       .end((err, res) => {
         if (err) return done(err)
@@ -176,24 +167,19 @@ describe('POST /weddings', () => {
         expect(status).toBe(400)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'SequelizeValidationError')
-        expect(body).toHaveProperty('message', ['Title is required'])
+        expect(body).toHaveProperty('message', ['Name is required'])
         done()
       })
   })
 
-  test('Case 5: Bad request; blank date', done => {
+  test('Case 5: Bad request: blank email', done => {
     request(app)
-      .post('/weddings')
+      .post('/guests')
       .set('access_token', access_token)
       .send({
-        title: 'Nobita & Shizuka',
-        date: '',
-        address: 'Kyoto',
-        groomName: 'Nobita',
-        brideName: 'Shizuka',
-        groomImg: 'img_url',
-        brideImg: 'img_url',
-        status: false
+        name: 'Giant', 
+        email: '', 
+        phoneNumber: '081289272900'
       })
       .end((err, res) => {
         if (err) return done(err)
@@ -201,24 +187,19 @@ describe('POST /weddings', () => {
         expect(status).toBe(400)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'SequelizeValidationError')
-        expect(body).toHaveProperty('message', ['Date is required'])
+        expect(body).toHaveProperty('message', ['Email is required'])
         done()
       })
   })
 
-  test('Case 6: Bad request; date must be greater than today', done => {
+  test('Case 6: Bad request: blank phone number', done => {
     request(app)
-      .post('/weddings')
+      .post('/guests')
       .set('access_token', access_token)
       .send({
-        title: 'Nobita & Shizuka',
-        date: '2020-11-05',
-        address: 'Kyoto',
-        groomName: 'Nobita',
-        brideName: 'Shizuka',
-        groomImg: 'img_url',
-        brideImg: 'img_url',
-        status: false
+        name: 'Giant', 
+        email: 'giantgendut@mail.com', 
+        phoneNumber: ''
       })
       .end((err, res) => {
         if (err) return done(err)
@@ -226,174 +207,19 @@ describe('POST /weddings', () => {
         expect(status).toBe(400)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'SequelizeValidationError')
-        expect(body).toHaveProperty('message', ['Please choose the date wisely. It must be greater than today'])
+        expect(body).toHaveProperty('message', ['Phone number is required'])
         done()
       })
   })
 
-  test('Case 7: Bad request; blank address', done => {
+  test(`Case 7: Bad request; all field's are blank`, done => {
     request(app)
-      .post('/weddings')
+      .post('/guests')
       .set('access_token', access_token)
       .send({
-        title: 'Nobita & Shizuka',
-        date: '2021-02-26',
-        address: '',
-        groomName: 'Nobita',
-        brideName: 'Shizuka',
-        groomImg: 'img_url',
-        brideImg: 'img_url',
-        status: false
-      })
-      .end((err, res) => {
-        if (err) return done(err)
-        const { body, status } = res
-        expect(status).toBe(400)
-        expect(body).toHaveProperty('status', 'Error')
-        expect(body).toHaveProperty('name', 'SequelizeValidationError')
-        expect(body).toHaveProperty('message', ['Address is required'])
-        done()
-      })
-  })
-
-  test('Case 8: Bad request; blank groom name', done => {
-    request(app)
-      .post('/weddings')
-      .set('access_token', access_token)
-      .send({
-        title: 'Nobita & Shizuka',
-        date: '2021-02-26',
-        address: 'Kyoto',
-        groomName: '',
-        brideName: 'Shizuka',
-        groomImg: 'img_url',
-        brideImg: 'img_url',
-        status: false
-      })
-      .end((err, res) => {
-        if (err) return done(err)
-        const { body, status } = res
-        expect(status).toBe(400)
-        expect(body).toHaveProperty('status', 'Error')
-        expect(body).toHaveProperty('name', 'SequelizeValidationError')
-        expect(body).toHaveProperty('message', [`Groom's Name is required`])
-        done()
-      })
-  })
-
-  test('Case 9: Bad request; blank bride name', done => {
-    request(app)
-      .post('/weddings')
-      .set('access_token', access_token)
-      .send({
-        title: 'Nobita & Shizuka',
-        date: '2021-02-26',
-        address: 'Kyoto',
-        groomName: 'Nobita',
-        brideName: '',
-        groomImg: 'img_url',
-        brideImg: 'img_url',
-        status: false
-      })
-      .end((err, res) => {
-        if (err) return done(err)
-        const { body, status } = res
-        expect(status).toBe(400)
-        expect(body).toHaveProperty('status', 'Error')
-        expect(body).toHaveProperty('name', 'SequelizeValidationError')
-        expect(body).toHaveProperty('message', [`Bride's Name is required`])
-        done()
-      })
-  })
-
-  test(`Case 10: Bad request; blank groom's photo`, done => {
-    request(app)
-      .post('/weddings')
-      .set('access_token', access_token)
-      .send({
-        title: 'Nobita & Shizuka',
-        date: '2021-02-26',
-        address: 'Kyoto',
-        groomName: 'Nobita',
-        brideName: 'Shizuka',
-        groomImg: '',
-        brideImg: 'img_url',
-        status: false
-      })
-      .end((err, res) => {
-        if (err) return done(err)
-        const { body, status } = res
-        expect(status).toBe(400)
-        expect(body).toHaveProperty('status', 'Error')
-        expect(body).toHaveProperty('name', 'SequelizeValidationError')
-        expect(body).toHaveProperty('message', [`Groom's Photo is required`])
-        done()
-      })
-  })
-
-  test(`Case 11: Bad request; blank bride's photo`, done => {
-    request(app)
-      .post('/weddings')
-      .set('access_token', access_token)
-      .send({
-        title: 'Nobita & Shizuka',
-        date: '2021-02-26',
-        address: 'Kyoto',
-        groomName: 'Nobita',
-        brideName: 'Shizuka',
-        groomImg: 'img_url',
-        brideImg: '',
-        status: false
-      })
-      .end((err, res) => {
-        if (err) return done(err)
-        const { body, status } = res
-        expect(status).toBe(400)
-        expect(body).toHaveProperty('status', 'Error')
-        expect(body).toHaveProperty('name', 'SequelizeValidationError')
-        expect(body).toHaveProperty('message', [`Bride's Photo is required`])
-        done()
-      })
-  })
-
-  test(`Case 12: Bad request; blank groom's photo`, done => {
-    request(app)
-      .post('/weddings')
-      .set('access_token', access_token)
-      .send({
-        title: 'Nobita & Shizuka',
-        date: '2021-02-26',
-        address: 'Kyoto',
-        groomName: 'Nobita',
-        brideName: 'Shizuka',
-        groomImg: '',
-        brideImg: 'img_url',
-        status: false
-      })
-      .end((err, res) => {
-        if (err) return done(err)
-        const { body, status } = res
-        expect(status).toBe(400)
-        expect(body).toHaveProperty('status', 'Error')
-        expect(body).toHaveProperty('name', 'SequelizeValidationError')
-        expect(body).toHaveProperty('message', [`Groom's Photo is required`])
-        done()
-      })
-  })
-
-  test(`Case 14: Bad request; all field's are blank`, done => {
-    request(app)
-      .post('/weddings')
-      .set('access_token', access_token)
-      .send({
-        title: '',
-        date: '',
-        address: '',
-        groomName: '',
-        brideName: '',
-        groomImg: '',
-        brideImg: '',
-        status: ''
+        name: '', 
+        email: '', 
+        phoneNumber: ''
       })
       .end((err, res) => {
         if (err) return done(err)
@@ -402,23 +228,19 @@ describe('POST /weddings', () => {
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'SequelizeValidationError')
         expect(body.message).toEqual(expect.arrayContaining([
-          'Title is required',
-          'Date is required',
-          'Address is required',
-          `Groom's Name is required`,
-          `Bride's Name is required`,
-          `Groom's Photo is required`,
-          `Bride's Photo is required`
+          'Name is required',
+          'Email is required',
+          'Phone number is required'
         ]))
         done()
       })
   })
 })
 
-describe('GET /weddings', () => {
-  test(`Case 1: Success get wedding's info`, done => {
+describe('GET /guests', () => {
+  test('Case 1: Success get all guest info', done => {
     request(app)
-      .get('/weddings')
+      .get('/guests')
       .set('access_token', access_token)
       .end((err, res) => {
         if (err) return done(err)
@@ -429,9 +251,9 @@ describe('GET /weddings', () => {
       })
   })
 
-  test(`Case 2: Wrong access token`, done => {
+  test('Case 2: Wrong access token', done => {
     request(app)
-      .get('/weddings')
+      .get('/guests')
       .set('access_token', wrong_access_token)
       .end((err, res) => {
         if (err) return done(err)
@@ -446,7 +268,7 @@ describe('GET /weddings', () => {
 
   test(`Case 3: Don't have access token`, done => {
     request(app)
-      .get('/weddings')
+      .get('/guests')
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
@@ -459,43 +281,107 @@ describe('GET /weddings', () => {
   })
 })
 
-describe('PUT /weddings/:id', () => {
-  test('Case 1: Success update wedding info (date)', done => {
+describe('GET /guests/:id', () => {
+  test('Case 1: Success get guest info', done => {
     request(app)
-      .put(`/weddings/${idWeds}`)
+      .get(`/guests/${idGuest}`)
       .set('access_token', access_token)
-      .send({
-        title: 'Nobita & Shizuka',
-        date: '2021-02-28',
-        address: 'Kyoto',
-        groomName: 'Nobita',
-        brideName: 'Shizuka',
-        groomImg: 'img_url',
-        brideImg: 'img_url',
-        status: false
-      })
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
         expect(status).toBe(200)
-        expect(body).toHaveProperty('date')
+        expect(body).toEqual(expect.arrayContaining([]))
         done()
       })
   })
 
   test('Case 2: Wrong access token', done => {
     request(app)
-      .put(`/weddings/${idWeds}`)
+      .get(`/guests/${idGuest}`)
+      .set('access_token', wrong_access_token)
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'ErrorAuthenticate')
+        expect(body).toHaveProperty('message', 'you need to login first')
+        done()
+      })
+  })
+
+  test(`Case 3: Don't have access token`, done => {
+    request(app)
+      .get(`/guests/${idGuest}`)
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body.error).toHaveProperty('name', 'JsonWebTokenError')
+        expect(body.error).toHaveProperty('message', 'jwt must be provided')
+        done()
+      })
+  })
+
+  test('Case 4: Wrong guest ID (Different User ID)', done => {
+    request(app)
+      .get(`/guests/${wrong_idGuest}`)
+      .set('access_token', access_token)
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(403)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'ErrorAuthorize')
+        expect(body).toHaveProperty('message', 'you dont have access')
+        done()
+      })
+  })
+
+  test('Case 5: Guest ID not found', done => {
+    request(app)
+      .get(`/guests/${idGuest + 5}`)
+      .set('access_token', access_token)
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(404)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'ErrorNotFound')
+        expect(body).toHaveProperty('message', 'not found')
+        done()
+      })
+  })
+})
+
+describe('PUT /guests/:id', () => {
+  test('Case 1: Success update guest info', done => {
+    request(app)
+      .put(`/guests/${idGuest}`)
+      .set('access_token', access_token)
+      .send({
+        name: 'Suneo', 
+        email: 'suneosombong@mail.com', 
+        phoneNumber: '081289272900'
+      })
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(200)
+        expect(body).toEqual(expect.arrayContaining([]))
+        done()
+      })
+  })
+
+  test('Case 2: Wrong access token', done => {
+    request(app)
+      .put(`/guests/${idGuest}`)
       .set('access_token', wrong_access_token)
       .send({
-        title: 'Nobita & Shizuka',
-        date: '2021-02-28',
-        address: 'Kyoto',
-        groomName: 'Nobita',
-        brideName: 'Shizuka',
-        groomImg: 'img_url',
-        brideImg: 'img_url',
-        status: false
+        name: 'Suneo', 
+        email: 'suneosombong@mail.com', 
+        phoneNumber: '081289272900'
       })
       .end((err, res) => {
         if (err) return done(err)
@@ -510,16 +396,11 @@ describe('PUT /weddings/:id', () => {
 
   test(`Case 3: Don't have access token`, done => {
     request(app)
-      .put(`/weddings/${idWeds}`)
+      .put(`/guests/${idGuest}`)
       .send({
-        title: 'Nobita & Shizuka',
-        date: '2021-02-28',
-        address: 'Kyoto',
-        groomName: 'Nobita',
-        brideName: 'Shizuka',
-        groomImg: 'img_url',
-        brideImg: 'img_url',
-        status: false
+        name: 'Suneo', 
+        email: 'suneosombong@mail.com', 
+        phoneNumber: '081289272900'
       })
       .end((err, res) => {
         if (err) return done(err)
@@ -532,24 +413,18 @@ describe('PUT /weddings/:id', () => {
       })
   })
 
-  test('Case 4: Wrong wedding ID (Different User ID)', done => {
+  test('Case 4: Wrong guest ID (Different User ID)', done => {
     request(app)
-      .put(`/weddings/${wrong_idWeds}`)
+      .put(`/guests/${wrong_idGuest}`)
       .set('access_token', access_token)
       .send({
-        title: 'Nobita & Shizuka',
-        date: '2021-02-28',
-        address: 'Kyoto',
-        groomName: 'Nobita',
-        brideName: 'Shizuka',
-        groomImg: 'img_url',
-        brideImg: 'img_url',
-        status: false
+        name: 'Suneo', 
+        email: 'suneosombong@mail.com', 
+        phoneNumber: '081289272900'
       })
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
-        console.log(wrong_idWeds)
         expect(status).toBe(403)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthorize')
@@ -558,19 +433,14 @@ describe('PUT /weddings/:id', () => {
       })
   })
 
-  test(`Case 5: Wedding ID not found`, done => {
+  test('Case 5: Guest ID not found', done => {
     request(app)
-      .put(`/weddings/${idWeds + 5}`)
+      .put(`/guests/${idGuest + 5}`)
       .set('access_token', access_token)
       .send({
-        title: 'Nobita & Shizuka',
-        date: '2021-02-28',
-        address: 'Kyoto',
-        groomName: 'Nobita',
-        brideName: 'Shizuka',
-        groomImg: 'img_url',
-        brideImg: 'img_url',
-        status: false
+        name: 'Suneo', 
+        email: 'suneosombong@mail.com', 
+        phoneNumber: '081289272900'
       })
       .end((err, res) => {
         if (err) return done(err)
@@ -584,23 +454,23 @@ describe('PUT /weddings/:id', () => {
   })
 })
 
-describe('DELETE /weddings/:id', () => {
-  test('Case 1: Success delete wedding info', done => {
+describe('DELETE /guests/:id', () => {
+  test('Case 1: Success delete guest info', done => {
     request(app)
-      .delete(`/weddings/${idWeds}`)
+      .delete(`/guests/${idGuest}`)
       .set('access_token', access_token)
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
         expect(status).toBe(200)
-        expect(body).toHaveProperty('message', 'Wedding deleted')
+        expect(body).toHaveProperty('message', 'Delete guest successful')
         done()
       })
   })
 
   test('Case 2: Wrong access token', done => {
     request(app)
-      .delete(`/weddings/${idWeds}`)
+      .delete(`/guests/${idGuest}`)
       .set('access_token', wrong_access_token)
       .end((err, res) => {
         if (err) return done(err)
@@ -615,7 +485,7 @@ describe('DELETE /weddings/:id', () => {
 
   test(`Case 3: Don't have access token`, done => {
     request(app)
-      .delete(`/weddings/${idWeds}`)
+      .delete(`/guests/${idGuest}`)
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
@@ -627,14 +497,13 @@ describe('DELETE /weddings/:id', () => {
       })
   })
 
-  test('Case 4: Wrong wedding ID (Different User ID)', done => {
+  test('Case 4: Wrong guest ID (Different User ID)', done => {
     request(app)
-      .delete(`/weddings/${wrong_idWeds}`)
+      .delete(`/guests/${wrong_idGuest}`)
       .set('access_token', access_token)
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
-        console.log(wrong_idWeds)
         expect(status).toBe(403)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthorize')
@@ -643,9 +512,9 @@ describe('DELETE /weddings/:id', () => {
       })
   })
 
-  test('Case 5: Wedding ID not found', done => {
+  test('Case 5: Guest ID not found', done => {
     request(app)
-      .delete(`/weddings/${idWeds + 5}`)
+      .delete(`/guests/${idGuest + 5}`)
       .set('access_token', access_token)
       .end((err, res) => {
         if (err) return done(err)
@@ -657,6 +526,4 @@ describe('DELETE /weddings/:id', () => {
         done()
       })
   })
-
-
 })

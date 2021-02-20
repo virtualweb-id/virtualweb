@@ -15,11 +15,26 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Guest.init({
-    name: DataTypes.STRING,
-    email: DataTypes.STRING,
-    phoneNumber: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: { msg: 'Name is required' }
+      }
+    },
+    email: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: { msg: 'Email is required' }
+      }
+    },
+    phoneNumber: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: { msg: 'Phone number is required' }
+      }
+    },
     status: DataTypes.BOOLEAN,
-    UserId: DataTypes.INTEGER,
+    UserId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Guest',
