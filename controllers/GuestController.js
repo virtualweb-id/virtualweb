@@ -55,7 +55,21 @@ class GuestController {
       })
       res.status(200).json(guest[1][0])
     } catch (err) {
-      console.log(err);
+      next(err)
+    }
+  }
+
+  static async sendStatus (req, res, next) {
+    try {
+      const { id } = req.params
+      const guest = await Guest.update({
+        status: true,
+      }, {
+        where: {id},
+        returning: true
+      })
+      res.status(200).json(guest[1][0])
+    } catch (err) {
       next(err)
     }
   }
