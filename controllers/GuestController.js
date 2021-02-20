@@ -27,11 +27,12 @@ class GuestController {
   static async create (req, res, next) {
     try {
       const UserId = req.user.id
-      const { name, email, phoneNumber } = req.body
+      const { name, email, phoneNumber, status } = req.body
       const guest = await Guest.create({
         name: name || '', 
         email: email || '', 
         phoneNumber: phoneNumber || '', 
+        status: status || false,
         UserId
       })
       res.status(201).json(guest)
