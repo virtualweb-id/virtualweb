@@ -73,18 +73,8 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: { msg: `Bride's Photo is required` }
       }
     },
-    status: {
-      type: DataTypes.BOOLEAN,
-      validate: {
-        notEmpty: { msg: 'Status is required' }
-      }
-    },
-    UserId: {
-      type: DataTypes.STRING,
-      validate: {
-        notEmpty: { msg: 'User ID is required' }
-      }
-    }
+    status: DataTypes.BOOLEAN,
+    UserId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Wedding',

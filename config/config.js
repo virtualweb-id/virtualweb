@@ -22,7 +22,8 @@ module.exports = {
     password,
     database,
     host,
-    dialect
+    dialect,
+    logging: false
   },
   "production": {
     "username": "root",
