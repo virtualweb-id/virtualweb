@@ -47,14 +47,18 @@ class WeddingController {
     try {
       const { id } = req.params
       const { title, date, address, groomName, groomImg, brideImg, brideName, status } = req.body
+      const uploadResponseGroom = await cloudinary.uploader
+      .upload(groomImg)
+      const uploadResponseBride = await cloudinary.uploader
+      .upload(brideImg)
       const editData = {
         title: title || '',
         date: date || '',
         address: address || '',
         groomName: groomName || '',
         brideName: brideName || '',
-        groomImg: groomImg || '',
-        brideImg: brideImg || '',
+        groomImg: uploadResponseGroom.url || '',
+        brideImg: uploadResponseBride.url || '',
         status: status || ''
       }
       const editedData = await Wedding.update(editData, {
