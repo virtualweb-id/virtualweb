@@ -29,6 +29,7 @@ class GuestController {
       const UserId = req.user.id
       const { name, email, phoneNumber, status } = req.body
       const guest = await Guest.create({
+        id: Math.random() * 10e8 | 0,
         name: name || '', 
         email: email || '', 
         phoneNumber: phoneNumber || '', 
