@@ -1,4 +1,4 @@
-const { Wedding, Invitation } = require('../models')
+const { Wedding, Invitation, Comment } = require('../models')
 const { cloudinary } = require('../helpers')
 
 class InvitationController {
@@ -7,9 +7,23 @@ class InvitationController {
       const UserId = req.user.id
       const { id: WeddingId } = await Wedding.findOne({ where: {UserId} })
       const invitation = await Invitation.findOne({ where: { WeddingId } })
-      res.status(200).json(invitation)
+      if (invitation) {
+        res.status(200).json(invitation)
+      } else {
+        next({ name: 'ErrorNotFound' })
+      }
     } catch (err) {
       next(err)
+    }
+  }
+
+  static async showById (req, res, next) {
+    try {
+      const { id } = req.params
+      const invitation = await Invitation.findOne({ where: { id }, include: [Wedding, Comment] })
+      res.status(200).json(invitation)
+    } catch (error) {
+      next(error)
     }
   }
 
@@ -22,17 +36,23 @@ class InvitationController {
         videoUrl, backgroundColor, textColor,
         timeEvent1, timeEvent2, youtubeUrl
       } = req.body
-      const uploadResponseBackgroundImg = await cloudinary.uploader
+      let uploadResponseBackgroundImg
+      let uploadResponseAdditionalImg
+      if (backgroundImg) {
+        uploadResponseBackgroundImg = await cloudinary.uploader
         .upload(backgroundImg)
-      const uploadResponseAdditionalImg = await cloudinary.uploader
+      }
+      if (additionalImg) {
+        uploadResponseAdditionalImg = await cloudinary.uploader
         .upload(additionalImg)
+      }
       const input = {
         brigeNickname: brigeNickname || '',
         groomNickname: groomNickname || '',
         story: story || '',
         title: title || '',
-        backgroundImg: uploadResponseBackgroundImg.url || '',
-        additionalImg: uploadResponseAdditionalImg.url || '',
+        backgroundImg: (uploadResponseBackgroundImg ? uploadResponseBackgroundImg.url : ''),
+        additionalImg: (uploadResponseAdditionalImg ? uploadResponseAdditionalImg.url : ''),
         videoUrl: videoUrl || '',
         backgroundColor: backgroundColor || '',
         textColor: textColor || '',

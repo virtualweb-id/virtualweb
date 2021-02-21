@@ -3,81 +3,86 @@ const { User, Guest, Wedding, Invitation } = require('../models')
 
 async function authentication(req, res, next) {
   try {
-    const decoded = verifyToken(req.headers.access_token)
-    const user = await User.findOne({
-      where: { email: decoded.email }
-    })
-    if (!user) {
-      next({ name: 'ErrorAuthenticate' })
+    const { access_token } = req.headers
+    if (!access_token) {
+      next({ name: 'ErrorAccessToken' })
     } else {
-      req.user = { id: user.id, email: user.email }
-      next()
+      const decoded = verifyToken(access_token)
+      const user = await User.findOne({
+        where: { email: decoded.email }
+      })
+      if (!user) {
+        next({ name: 'ErrorAuthenticate' })
+      } else {
+        req.user = { id: user.id, email: user.email }
+        next()
+      }
     }
   } catch (err) {
     next(err)
   }
 }
 
-const authorizeGuest = async (req,res,next) => {
+const authorizeGuest = async (req, res, next) => {
   try {
     const { id } = req.params
     const UserId = req.user.id
     const guest = await Guest.findOne({
-      where: {id}
+      where: { id }
     })
-    if(guest){
-      if(UserId == guest.UserId){
+    if (guest) {
+      if (UserId == guest.UserId) {
         next()
-      }else{
-        next({name: 'ErrorAuthorize'})
+      } else {
+        next({ name: 'ErrorAuthorize' })
       }
-    }else{
-      next({name: 'ErrorNotFound'})
+    } else {
+      next({ name: 'ErrorNotFound' })
     }
   } catch (err) {
     next(err)
   }
 }
 
-const authorizeWedding = async (req,res,next) => {
+const authorizeWedding = async (req, res, next) => {
   try {
     const { id } = req.params
     const UserId = req.user.id
     const wedding = await Wedding.findOne({
-      where: {id}
+      where: { id }
     })
-    if(wedding){
-      if(UserId == wedding.UserId){
+    if (wedding) {
+      if (UserId == wedding.UserId) {
         next()
-      }else{
-        next({name: 'ErrorAuthorize'})
+      } else {
+        next({ name: 'ErrorAuthorize' })
       }
-    }else{
-      next({name: 'ErrorNotFound'})
+    } else {
+      next({ name: 'ErrorNotFound' })
     }
   } catch (err) {
     next(err)
   }
 }
 
-const authorizeInvitation = async (req,res,next) => {
+const authorizeInvitation = async (req, res, next) => {
   try {
     const { id } = req.params
     const UserId = req.user.id
     const wedding = await Wedding.findOne({
-      where: {UserId}
+      where: { UserId }
     })
     const invitation = await Invitation.findOne({
-      where: {id}
+      where: { id }
     })
-    if(invitation){
-      if(wedding.id == invitation.WeddingId){
+    if (invitation) {
+      if (wedding.id == invitation.WeddingId) {
         next()
-      }else{
-        next({name: 'ErrorAuthorize'})
+      } else {
+        next({ name: 'ErrorAuthorize' })
       }
-    }else{
-      next({name: 'ErrorNotFound'})
+    } else {
+      next({ name: 'ErrorNotFound' })
     }
   } catch (err) {
     next(err)

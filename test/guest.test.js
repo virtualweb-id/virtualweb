@@ -4,18 +4,18 @@ const { sequelize } = require('../models')
 const { queryInterface } = sequelize
 const { hashPwd, generateToken } = require('../helpers')
 
-const passTest = 'shizukaku'
+const passTest = 'password'
 const userTest = {
-  name: 'Nobita',
-  email: 'nobitamu@mail.com',
+  name: 'Jamal',
+  email: 'jamal@mail.com',
   password: hashPwd(passTest),
   phoneNumber: '72777777',
   createdAt: new Date(),
   updatedAt: new Date()
 }
 const otherUserTest = {
-  name: 'Shizuka',
-  email: 'shizukamu@mail.com',
+  name: 'Bambang',
+  email: 'bambang@mail.com',
   password: hashPwd(passTest),
   phoneNumber: '27222222',
   createdAt: new Date(),
@@ -35,8 +35,8 @@ let addWeddingTest = {
   updatedAt: new Date()
 }
 let addGuestTest = {
-  name: 'Giant', 
-  email: 'giantgendut@mail.com', 
+  name: 'Giant',
+  email: 'giantgendut@mail.com',
   phoneNumber: '081289272900',
   status: false,
   UserId: 0,
@@ -44,8 +44,8 @@ let addGuestTest = {
   updatedAt: new Date()
 }
 let addOtherGuestTest = {
-  name: 'Giant', 
-  email: 'giantgendut@mail.com', 
+  name: 'Giant',
+  email: 'giantgendut@mail.com',
   phoneNumber: '081289272900',
   status: false,
   UserId: 0,
@@ -74,7 +74,7 @@ beforeAll(done => {
     })
     .then(guests => {
       idGuest = guests[0].id
-      return queryInterface.bulkInsert('Users', [ otherUserTest ], { returning: true })
+      return queryInterface.bulkInsert('Users', [otherUserTest], { returning: true })
     })
     .then(othUser => {
       addOtherGuestTest.UserId = othUser[0].id
@@ -89,6 +89,8 @@ beforeAll(done => {
 
 afterAll(done => {
   queryInterface.bulkDelete('Users')
+    .then(() => { return queryInterface.bulkDelete('Weddings') })
+    .then(() => { return queryInterface.bulkDelete('Guests') })
     .then(() => done())
     .catch(err => done(err))
 })
@@ -99,8 +101,8 @@ describe('POST /guest', () => {
       .post('/guests')
       .set('access_token', access_token)
       .send({
-        name: 'Giant', 
-        email: 'giantgendut@mail.com', 
+        name: 'Giant',
+        email: 'giantgendut@mail.com',
         phoneNumber: '081289272900'
       })
       .end((err, res) => {
@@ -117,8 +119,8 @@ describe('POST /guest', () => {
       .post('/guests')
       .set('access_token', wrong_access_token)
       .send({
-        name: 'Giant', 
-        email: 'giantgendut@mail.com', 
+        name: 'Giant',
+        email: 'giantgendut@mail.com',
         phoneNumber: '081289272900'
       })
       .end((err, res) => {
@@ -136,17 +138,17 @@ describe('POST /guest', () => {
     request(app)
       .post('/guests')
       .send({
-        name: 'Giant', 
-        email: 'giantgendut@mail.com', 
+        name: 'Giant',
+        email: 'giantgendut@mail.com',
         phoneNumber: '081289272900'
       })
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
-        expect(status).toBe(500)
+        expect(status).toBe(403)
         expect(body).toHaveProperty('status', 'Error')
-        expect(body.error).toHaveProperty('name', 'JsonWebTokenError')
-        expect(body.error).toHaveProperty('message', 'jwt must be provided')
+        expect(body).toHaveProperty('name', 'ErrorAccessToken')
+        expect(body).toHaveProperty('message', 'Jwt needed')
         done()
       })
   })
@@ -156,8 +158,8 @@ describe('POST /guest', () => {
       .post('/guests')
       .set('access_token', access_token)
       .send({
-        name: '', 
-        email: 'giantgendut@mail.com', 
+        name: '',
+        email: 'giantgendut@mail.com',
         phoneNumber: '081289272900'
       })
       .end((err, res) => {
@@ -176,8 +178,8 @@ describe('POST /guest', () => {
       .post('/guests')
       .set('access_token', access_token)
       .send({
-        name: 'Giant', 
-        email: '', 
+        name: 'Giant',
+        email: '',
         phoneNumber: '081289272900'
       })
       .end((err, res) => {
@@ -196,8 +198,8 @@ describe('POST /guest', () => {
       .post('/guests')
       .set('access_token', access_token)
       .send({
-        name: 'Giant', 
-        email: 'giantgendut@mail.com', 
+        name: 'Giant',
+        email: 'giantgendut@mail.com',
         phoneNumber: ''
       })
       .end((err, res) => {
@@ -216,8 +218,8 @@ describe('POST /guest', () => {
       .post('/guests')
       .set('access_token', access_token)
       .send({
-        name: '', 
-        email: '', 
+        name: '',
+        email: '',
         phoneNumber: ''
       })
       .end((err, res) => {
@@ -265,16 +267,29 @@ describe('GET /guests', () => {
       })
   })
 
+  test("response with internal server error", (done) => {
+    request(app)
+      .get("/guests")
+      .set("access_token", "access_token")
+      .end((err, res) => {
+        const { status, body } = res
+        if (err) return done(err)
+        expect(status).toBe(500)
+        expect(body.error).toHaveProperty("message", "jwt malformed")
+        done()
+      })
+  })
+
   test(`Case 3: Don't have access token`, done => {
     request(app)
       .get('/guests')
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
-        expect(status).toBe(500)
+        expect(status).toBe(403)
         expect(body).toHaveProperty('status', 'Error')
-        expect(body.error).toHaveProperty('name', 'JsonWebTokenError')
-        expect(body.error).toHaveProperty('message', 'jwt must be provided')
+        expect(body).toHaveProperty('name', 'ErrorAccessToken')
+        expect(body).toHaveProperty('message', 'Jwt needed')
         done()
       })
   })
@@ -315,10 +330,10 @@ describe('GET /guests/:id', () => {
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
-        expect(status).toBe(500)
+        expect(status).toBe(403)
         expect(body).toHaveProperty('status', 'Error')
-        expect(body.error).toHaveProperty('name', 'JsonWebTokenError')
-        expect(body.error).toHaveProperty('message', 'jwt must be provided')
+        expect(body).toHaveProperty('name', 'ErrorAccessToken')
+        expect(body).toHaveProperty('message', 'Jwt needed')
         done()
       })
   })
@@ -360,8 +375,8 @@ describe('PUT /guests/:id', () => {
       .put(`/guests/${idGuest}`)
       .set('access_token', access_token)
       .send({
-        name: 'Suneo', 
-        email: 'suneosombong@mail.com', 
+        name: 'Suneo',
+        email: 'suneosombong@mail.com',
         phoneNumber: '081289272900'
       })
       .end((err, res) => {
@@ -378,8 +393,8 @@ describe('PUT /guests/:id', () => {
       .put(`/guests/${idGuest}`)
       .set('access_token', wrong_access_token)
       .send({
-        name: 'Suneo', 
-        email: 'suneosombong@mail.com', 
+        name: 'Suneo',
+        email: 'suneosombong@mail.com',
         phoneNumber: '081289272900'
       })
       .end((err, res) => {
@@ -397,17 +412,17 @@ describe('PUT /guests/:id', () => {
     request(app)
       .put(`/guests/${idGuest}`)
       .send({
-        name: 'Suneo', 
-        email: 'suneosombong@mail.com', 
+        name: 'Suneo',
+        email: 'suneosombong@mail.com',
         phoneNumber: '081289272900'
       })
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
-        expect(status).toBe(500)
+        expect(status).toBe(403)
         expect(body).toHaveProperty('status', 'Error')
-        expect(body.error).toHaveProperty('name', 'JsonWebTokenError')
-        expect(body.error).toHaveProperty('message', 'jwt must be provided')
+        expect(body).toHaveProperty('name', 'ErrorAccessToken')
+        expect(body).toHaveProperty('message', 'Jwt needed')
         done()
       })
   })
@@ -417,8 +432,8 @@ describe('PUT /guests/:id', () => {
       .put(`/guests/${wrong_idGuest}`)
       .set('access_token', access_token)
       .send({
-        name: 'Suneo', 
-        email: 'suneosombong@mail.com', 
+        name: 'Suneo',
+        email: 'suneosombong@mail.com',
         phoneNumber: '081289272900'
       })
       .end((err, res) => {
@@ -437,10 +452,84 @@ describe('PUT /guests/:id', () => {
       .put(`/guests/${idGuest + 5}`)
       .set('access_token', access_token)
       .send({
-        name: 'Suneo', 
-        email: 'suneosombong@mail.com', 
+        name: 'Suneo',
+        email: 'suneosombong@mail.com',
         phoneNumber: '081289272900'
       })
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(404)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'ErrorNotFound')
+        expect(body).toHaveProperty('message', 'not found')
+        done()
+      })
+  })
+})
+
+describe('PATCH /guests/:id', () => {
+  test(`Case 1: Success update guest's status`, done => {
+    request(app)
+      .patch(`/guests/${idGuest}`)
+      .set('access_token', access_token)
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(200)
+        expect(body).toHaveProperty('status', true)
+        done()
+      })
+  })
+
+  test('Case 2: Wrong access token', done => {
+    request(app)
+      .patch(`/guests/${idGuest}`)
+      .set('access_token', wrong_access_token)
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'ErrorAuthenticate')
+        expect(body).toHaveProperty('message', 'you need to login first')
+        done()
+      })
+  })
+
+  test(`Case 3: Don't have access token`, done => {
+    request(app)
+      .patch(`/guests/${idGuest}`)
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(403)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'ErrorAccessToken')
+        expect(body).toHaveProperty('message', 'Jwt needed')
+        done()
+      })
+  })
+
+  test('Case 4: Wrong guest ID (Different User ID)', done => {
+    request(app)
+      .patch(`/guests/${wrong_idGuest}`)
+      .set('access_token', access_token)
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(403)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'ErrorAuthorize')
+        expect(body).toHaveProperty('message', 'you dont have access')
+        done()
+      })
+  })
+
+  test('Case 5: Guest ID not found', done => {
+    request(app)
+      .patch(`/guests/${idGuest + 5}`)
+      .set('access_token', access_token)
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
@@ -488,10 +577,10 @@ describe('DELETE /guests/:id', () => {
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
-        expect(status).toBe(500)
+        expect(status).toBe(403)
         expect(body).toHaveProperty('status', 'Error')
-        expect(body.error).toHaveProperty('name', 'JsonWebTokenError')
-        expect(body.error).toHaveProperty('message', 'jwt must be provided')
+        expect(body).toHaveProperty('name', 'ErrorAccessToken')
+        expect(body).toHaveProperty('message', 'Jwt needed')
         done()
       })
   })
