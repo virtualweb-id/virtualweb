@@ -1,5 +1,5 @@
 const { Wedding, Invitation } = require('../models')
-const cloudinary = require('../helpers/cloudinary')
+const { cloudinary } = require('../helpers')
 
 class WeddingController {
   static async getWeddingInfoById(req, res, next) {
@@ -19,9 +19,9 @@ class WeddingController {
       const UserId = req.user.id
       const { title, date, address, groomName, groomImg, brideImg, brideName, status } = req.body
       const uploadResponseGroom = await cloudinary.uploader
-      .upload(groomImg)
+        .upload(groomImg)
       const uploadResponseBride = await cloudinary.uploader
-      .upload(brideImg)
+        .upload(brideImg)
       const newData = {
         id: Math.random() * 10e8 | 0,
         title: title || '',
@@ -47,9 +47,9 @@ class WeddingController {
       const { id } = req.params
       const { title, date, address, groomName, groomImg, brideImg, brideName, status } = req.body
       const uploadResponseGroom = await cloudinary.uploader
-      .upload(groomImg)
+        .upload(groomImg)
       const uploadResponseBride = await cloudinary.uploader
-      .upload(brideImg)
+        .upload(brideImg)
       const editData = {
         title: title || '',
         date: date || '',

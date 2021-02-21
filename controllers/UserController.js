@@ -1,18 +1,17 @@
 const { User } = require('../models')
-const { comparePwd } = require('../helpers/bcrypt')
-const { generateToken } = require('../helpers/jwt')
+const { comparePwd, generateToken, sendEmail } = require('../helpers')
 
 class UserController {
   static async register(req, res, next) {
     try {
       const { name, email, password, phoneNumber } = req.body
-
       const user = await User.create({
         name: name || '',
         email: email || '',
         password: password || '',
         phoneNumber: phoneNumber || ''
       })
+      await sendEmail(user.name, user.email)
       res.status(201).json({
         id: user.id,
         name: user.name,
