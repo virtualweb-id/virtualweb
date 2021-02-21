@@ -33,7 +33,7 @@ class GuestController {
         name: name || '', 
         email: email || '', 
         phoneNumber: phoneNumber || '', 
-        status: status || false,
+        status: status || null,
         UserId
       })
       res.status(201).json(guest)
@@ -63,13 +63,19 @@ class GuestController {
   static async sendStatus (req, res, next) {
     try {
       const { id } = req.params
-      const guest = await Guest.update({
-        status: true,
-      }, {
-        where: {id},
-        returning: true
-      })
-      res.status(200).json(guest[1][0])
+      const { status, email } = req.body
+      const hasGuest = await Guest.findOne({ where: {id, email} })
+      if (!hasGuest) {
+        next({name: "ErrorNotFound"})
+      } else {
+        const guest = await Guest.update({
+          status
+        }, {
+          where: {id},
+          returning: true
+        })
+        res.status(200).json(guest[1][0])
+      }
     } catch (err) {
       next(err)
     }
