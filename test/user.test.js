@@ -4,10 +4,10 @@ const { sequelize } = require('../models')
 const { queryInterface } = sequelize
 const { hashPwd } = require('../helpers')
 
-const passTest = 'shizukaku'
+const passTest = 'password'
 const userTest = {
-  name: 'Nobita',
-  email: 'nobitamu@mail.com',
+  name: 'Reyhan',
+  email: 'reyhan@mail.com',
   password: hashPwd(passTest),
   phoneNumber: '72777777',
   createdAt: new Date(),
@@ -43,7 +43,22 @@ describe('POST /register', () => {
       })
   })
 
-  test('Case 2: Blank name', done => {
+  test('Case 2: Email has been registered', done => {
+    request(app)
+      .post('/register')
+      .send({ name: 'Shizuka', email: 'shizukamu@mail.com', password: hashPwd('nobitaku'), phoneNumber: '27222222' })
+      .end((err, res) => {
+        const { body, status } = res
+        if (err) return done(err)
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'SequelizeUniqueConstraintError')
+        expect(body.message).toEqual(expect.arrayContaining(['email must be unique']))
+        done()
+      })
+  })
+
+  test('Case 3: Blank name', done => {
     request(app)
       .post('/register')
       .send({ name: '', email: 'shizukamu@mail.com', password: hashPwd('nobitaku'), phoneNumber: '27222222' })
@@ -58,7 +73,7 @@ describe('POST /register', () => {
       })
   })
 
-  test('Case 3: Blank email', done => {
+  test('Case 4: Blank email', done => {
     request(app)
       .post('/register')
       .send({ name: 'Shizuka', email: '', password: hashPwd('nobitaku'), phoneNumber: '27222222' })
@@ -76,7 +91,7 @@ describe('POST /register', () => {
       })
   })
 
-  test('Case 4: Blank password', done => {
+  test('Case 5: Blank password', done => {
     request(app)
       .post('/register')
       .send({ name: 'Shizuka', email: 'shizukamu@mail.com', password: '', phoneNumber: '27222222' })
@@ -94,7 +109,7 @@ describe('POST /register', () => {
       })
   })
 
-  test('Case 5: Blank phone number', done => {
+  test('Case 6: Blank phone number', done => {
     request(app)
       .post('/register')
       .send({ name: 'Shizuka', email: 'shizukamu@mail.com', password: hashPwd('nobitaku'), phoneNumber: '' })
@@ -109,7 +124,7 @@ describe('POST /register', () => {
       })
   })
 
-  test('Case 6: Blank name, email, password, & phone number', done => {
+  test('Case 7: Blank name, email, password, & phone number', done => {
     request(app)
       .post('/register')
       .end((err, res) => {
