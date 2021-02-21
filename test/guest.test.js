@@ -44,8 +44,8 @@ let addGuestTest = {
   updatedAt: new Date()
 }
 let addOtherGuestTest = {
-  name: 'Giant',
-  email: 'giantgendut@mail.com',
+  name: 'Suneo',
+  email: 'suneosombong@mail.com',
   phoneNumber: '081289272900',
   status: false,
   UserId: 0,
@@ -375,8 +375,8 @@ describe('PUT /guests/:id', () => {
       .put(`/guests/${idGuest}`)
       .set('access_token', access_token)
       .send({
-        name: 'Suneo',
-        email: 'suneosombong@mail.com',
+        name: 'Dekisugi',
+        email: 'dekisugi@mail.com',
         phoneNumber: '081289272900'
       })
       .end((err, res) => {
@@ -472,64 +472,27 @@ describe('PATCH /guests/:id', () => {
   test(`Case 1: Success update guest's status`, done => {
     request(app)
       .patch(`/guests/${idGuest}`)
-      .set('access_token', access_token)
+      .send({
+        status: true,
+        email: 'dekisugi@mail.com'
+      })
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
+        console.log(idGuest)
         expect(status).toBe(200)
         expect(body).toHaveProperty('status', true)
         done()
       })
   })
 
-  test('Case 2: Wrong access token', done => {
-    request(app)
-      .patch(`/guests/${idGuest}`)
-      .set('access_token', wrong_access_token)
-      .end((err, res) => {
-        if (err) return done(err)
-        const { body, status } = res
-        expect(status).toBe(401)
-        expect(body).toHaveProperty('status', 'Error')
-        expect(body).toHaveProperty('name', 'ErrorAuthenticate')
-        expect(body).toHaveProperty('message', 'you need to login first')
-        done()
-      })
-  })
-
-  test(`Case 3: Don't have access token`, done => {
-    request(app)
-      .patch(`/guests/${idGuest}`)
-      .end((err, res) => {
-        if (err) return done(err)
-        const { body, status } = res
-        expect(status).toBe(403)
-        expect(body).toHaveProperty('status', 'Error')
-        expect(body).toHaveProperty('name', 'ErrorAccessToken')
-        expect(body).toHaveProperty('message', 'Jwt needed')
-        done()
-      })
-  })
-
-  test('Case 4: Wrong guest ID (Different User ID)', done => {
+  test('Case 2: Wrong guest ID (Different invitation)', done => {
     request(app)
       .patch(`/guests/${wrong_idGuest}`)
-      .set('access_token', access_token)
-      .end((err, res) => {
-        if (err) return done(err)
-        const { body, status } = res
-        expect(status).toBe(403)
-        expect(body).toHaveProperty('status', 'Error')
-        expect(body).toHaveProperty('name', 'ErrorAuthorize')
-        expect(body).toHaveProperty('message', 'you dont have access')
-        done()
+      .send({
+        status: true,
+        email: 'giantgendut@mail.com'
       })
-  })
-
-  test('Case 5: Guest ID not found', done => {
-    request(app)
-      .patch(`/guests/${idGuest + 5}`)
-      .set('access_token', access_token)
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
@@ -540,6 +503,21 @@ describe('PATCH /guests/:id', () => {
         done()
       })
   })
+
+  // test('Case 3: M', done => {
+  //   request(app)
+  //     .patch(`/guests/${idGuest + 5}`)
+  //     .set('access_token', access_token)
+  //     .end((err, res) => {
+  //       if (err) return done(err)
+  //       const { body, status } = res
+  //       expect(status).toBe(404)
+  //       expect(body).toHaveProperty('status', 'Error')
+  //       expect(body).toHaveProperty('name', 'ErrorNotFound')
+  //       expect(body).toHaveProperty('message', 'not found')
+  //       done()
+  //     })
+  // })
 })
 
 describe('DELETE /guests/:id', () => {

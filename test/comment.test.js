@@ -14,33 +14,12 @@ const userTest = {
   createdAt: new Date(),
   updatedAt: new Date()
 }
-let otherUserTest = {
-  name: 'Ratna',
-  email: 'ratna@mail.com',
-  password: hashPwd(passTest),
-  phoneNumber: '27222222',
-  createdAt: new Date(),
-  updatedAt: new Date()
-}
 let addWeddingTest = {
   title: 'Nobita & Shizuka',
   date: '2021-02-26',
   address: 'Kyoto',
   groomName: 'Nobita',
   brideName: 'Shizuka',
-  groomImg: dummy,
-  brideImg: dummy,
-  status: false,
-  UserId: 0,
-  createdAt: new Date(),
-  updatedAt: new Date()
-}
-let addOtherWeddingTest = {
-  title: 'Suneo & Maimunah',
-  date: '2021-02-28',
-  address: 'Tokyo',
-  groomName: 'Suneo',
-  brideName: 'Maimunah',
   groomImg: dummy,
   brideImg: dummy,
   status: false,
@@ -73,7 +52,6 @@ let otherCommentTest = {
   message: 'Selamat ya, semoga samawa',
   InvitationId: 0
 }
-let idWeds
 let idInvt
 
 beforeAll(done => {
