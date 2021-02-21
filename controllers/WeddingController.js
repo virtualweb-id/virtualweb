@@ -70,8 +70,8 @@ class WeddingController {
         address: address || '',
         groomName: groomName || '',
         brideName: brideName || '',
-        groomImg: groomImg || '',
-        brideImg: brideImg || '',
+        groomImg: uploadResponseGroom.url || '',
+        brideImg: uploadResponseBride.url || '',
         status: status || false
       }
       const editedData = await Wedding.update(editData, {
