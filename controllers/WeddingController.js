@@ -36,7 +36,17 @@ class WeddingController {
         UserId
       }
       const createWedding = await Wedding.create(newData)
-      if (createWedding) await Invitation.create({ WeddingId: createWedding.id })
+      if (createWedding) await Invitation.create({ 
+        WeddingId: createWedding.id,
+        brigeNickname: createWedding.brideName,
+        groomNickname: createWedding.groomName,
+        story: "Your story here",
+        title: "Title",
+        backgroundColor: '#1687a7', 
+        textColor: '#d3e0ea', 
+        timeEvent1: '8.00', 
+        timeEvent2: '11.00',  
+      })
       res.status(201).json(createWedding)
     } catch (error) {
       next(error)
