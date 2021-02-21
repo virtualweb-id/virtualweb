@@ -5,7 +5,7 @@ class InvitationController {
   static async showOne(req, res, next) {
     try {
       const UserId = req.user.id
-      const { id: WeddingId } = await Wedding.findByPk(UserId)
+      const { id: WeddingId } = await Wedding.findOne({ where: {UserId} })
       const invitation = await Invitation.findOne({ where: { WeddingId } })
       res.status(200).json(invitation)
     } catch (err) {
