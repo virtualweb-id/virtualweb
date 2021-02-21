@@ -37,11 +37,14 @@ class WeddingController {
       }
       const createWedding = await Wedding.create(newData)
       if (createWedding) await Invitation.create({ 
+        id: Math.random() * 10e8 | 0,
         WeddingId: createWedding.id,
         brigeNickname: createWedding.brideName,
         groomNickname: createWedding.groomName,
         story: "Your story here",
         title: "Title",
+        backgroundImg: "https://wallpaperaccess.com/full/229801.jpg",
+        additionalImg: "https://wallpaperaccess.com/full/229801.jpg",
         backgroundColor: '#1687a7', 
         textColor: '#d3e0ea', 
         timeEvent1: '8.00', 
