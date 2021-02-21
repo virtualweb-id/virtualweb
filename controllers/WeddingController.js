@@ -19,10 +19,16 @@ class WeddingController {
     try {
       const UserId = req.user.id
       const { title, date, address, groomName, groomImg, brideImg, brideName, status } = req.body
-      const uploadResponseGroom = await cloudinary.uploader
+      let uploadResponseGroom
+      let uploadResponseBride
+      if (groomImg) {
+        uploadResponseGroom = await cloudinary.uploader
         .upload(groomImg)
-      const uploadResponseBride = await cloudinary.uploader
-        .upload(brideImg)
+      }
+      if (brideImg) {
+        uploadResponseBride = await cloudinary.uploader
+          .upload(brideImg)
+      }
       const newData = {
         id: Math.random() * 10e8 | 0,
         title: title || '',
@@ -30,8 +36,8 @@ class WeddingController {
         address: address || '',
         groomName: groomName || '',
         brideName: brideName || '',
-        groomImg: uploadResponseGroom.url || '',
-        brideImg: uploadResponseBride.url || '',
+        groomImg: (uploadResponseGroom ? uploadResponseGroom.url : ''),
+        brideImg: (uploadResponseBride ? uploadResponseBride.url : ''),
         status: status || false,
         UserId
       }
@@ -60,18 +66,24 @@ class WeddingController {
     try {
       const { id } = req.params
       const { title, date, address, groomName, groomImg, brideImg, brideName, status } = req.body
-      const uploadResponseGroom = await cloudinary.uploader
+      let uploadResponseGroom
+      let uploadResponseBride
+      if (groomImg) {
+        uploadResponseGroom = await cloudinary.uploader
         .upload(groomImg)
-      const uploadResponseBride = await cloudinary.uploader
-        .upload(brideImg)
+      }
+      if (brideImg) {
+        uploadResponseBride = await cloudinary.uploader
+          .upload(brideImg)
+      }
       const editData = {
         title: title || '',
         date: date || '',
         address: address || '',
         groomName: groomName || '',
         brideName: brideName || '',
-        groomImg: uploadResponseGroom.url || '',
-        brideImg: uploadResponseBride.url || '',
+        groomImg: (uploadResponseGroom ? uploadResponseGroom.url : ''),
+        brideImg: (uploadResponseBride ? uploadResponseBride.url : ''),
         status: status || false
       }
       const editedData = await Wedding.update(editData, {
