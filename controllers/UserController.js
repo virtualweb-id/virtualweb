@@ -1,5 +1,5 @@
 const { User } = require('../models')
-const { comparePwd, generateToken, sendEmail } = require('../helpers')
+const { comparePwd, generateToken, sendToUser } = require('../helpers')
 
 class UserController {
   static async register(req, res, next) {
@@ -11,7 +11,7 @@ class UserController {
         password: password || '',
         phoneNumber: phoneNumber || ''
       })
-      await sendEmail(user.name, user.email)
+      await sendToUser(user.name, user.email)
       res.status(201).json({
         id: user.id,
         name: user.name,
