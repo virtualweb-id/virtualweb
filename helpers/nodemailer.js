@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer')
+const contentMail = require('./mail')
 
 const sendToUser = (name, email) => {
   const output = `
@@ -38,18 +39,7 @@ const sendToUser = (name, email) => {
 const sendToGuest = (name, email, url1, url2) => {
   const baseUrl = 'http://localhost:3000'
 
-  const output = `
-    <p>Hi!</p>
-    <h4>Account details:</h4>
-    <h3>Your Guest ID: <b>${url1}</b></h3>
-    <ul>
-      <li>Name: ${name}</li>
-      <li>Email: ${email}</li>
-      <li>Confirm your attendance <a href="${baseUrl}/guestConfirmation">here.</a></li>
-      <li>Link Nonton Nikah <a href="${baseUrl}/event/${url2}">here.</a></li>
-    </ul>
-    <h4>Thanks for using Undanganku!</h4>
-  `
+  const output = contentMail(name, name, name, name, name, name)
   
   let transporter = nodemailer.createTransport({
     service: process.env.MAILER_PROVIDER,
