@@ -1,4 +1,4 @@
-module.exports = ( guest, bride, groom, date, guestId, invitationId ) => {
+module.exports = ( guest, bride, groom, date, guestId, invitationId, baseUrl ) => {
   const content = `
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   <html xmlns="http://www.w3.org/1999/xhtml">
@@ -131,22 +131,34 @@ module.exports = ( guest, bride, groom, date, guestId, invitationId ) => {
                   <td height="66"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
                 </tr>
                 <tr>
-                  <td style="font-size:36px; color:#ffffff; text-transform: uppercase; text-align:center; font-family: 'Montserrat', sans-serif, Arial, Helvetica; font-weight:700; letter-spacing:7px; word-spacing:1px;" class="letter-spacing">You Are Invited</td>
+                  <td style="font-size:32px; color:#ffffff; text-transform: uppercase; text-align:center; font-family: 'Montserrat', sans-serif, Arial, Helvetica; font-weight:700; letter-spacing:7px; word-spacing:1px;" class="letter-spacing">You're Invited</td>
                 </tr>
                 <tr>
-                  <td height="4"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
+                  <td height="14"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
                 </tr>
                 <tr>
-                  <td style="font-size:21px; color:#ffffff; text-align:center; font-family: 'Cinzel Decorative', sans-serif, Arial, Helvetica; text-transform: uppercase;  word-spacing:2px; letter-spacing: 6px;" class="letter-spacing">{BrideName} &amp; {GroomName}</td>
+                  <td style="font-size:21px; color:#ffffff; text-align:center; font-family: 'Cinzel Decorative', sans-serif, Arial, Helvetica; text-transform: uppercase;  word-spacing:2px; letter-spacing: 6px;" class="letter-spacing">${bride}</td>
                 </tr>
                 <tr>
-                  <td height="10"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
+                  <td height="8"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
                 </tr>
                 <tr>
-                  <td style="font-size:16px; color:#92763d; font-weight:700; text-align: center; text-transform: uppercase;  word-spacing:2px; letter-spacing: 2px;">{ ini buat date =>>> saturday, 25 july 2017}</td>
+                  <td style="font-size:18px; color:#ffffff; text-align:center; font-family: 'Cinzel Decorative', sans-serif, Arial, Helvetica; text-transform: uppercase;  word-spacing:2px; letter-spacing: 6px;" class="letter-spacing">&amp;</td>
+                  <tr>
+                  <td height="8"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
+                </tr>
+                  <tr>
+                  <td style="font-size:18px; color:#ffffff; text-align:center; font-family: 'Cinzel Decorative', sans-serif, Arial, Helvetica; text-transform: uppercase;  word-spacing:2px; letter-spacing: 6px;" class="letter-spacing">${groom}</td>
+                </tr>
                 </tr>
                 <tr>
-                  <td height="37"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
+                  <td height="25"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
+                </tr>
+                <tr>
+                  <td style="font-size:16px; color:#92763d; font-weight:700; text-align: center; text-transform: uppercase;  word-spacing:2px; letter-spacing: 2px;">${date}</td>
+                </tr>
+                <tr>
+                  <td height="30"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
                 </tr>
   
               </table></td>
@@ -165,16 +177,16 @@ module.exports = ( guest, bride, groom, date, guestId, invitationId ) => {
               <td>
               <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#212121;">
                 <tr>
-                  <td height="61"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
+                  <td height="40"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
                 </tr>
                 <tr>
-                  <td style="font-size:24px; color:#fff; font-family: 'Montserrat', sans-serif, Arial, Helvetica; font-weight:400; text-align:center; text-transform: uppercase; letter-spacing: 5px;">dear,{guest Name}</td>
+                  <td style="font-size:20px; color:#fff; font-family: 'Montserrat', sans-serif, Arial, Helvetica; font-weight:400; text-align:center; text-transform: uppercase; letter-spacing: 5px;">${guest}</td>
                 </tr>
                 <tr>
                   <td height="30"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
                 </tr>
                 <tr>
-                  <td style="font-size:20px; color:#fff; font-family: 'Montserrat', sans-serif, Arial, Helvetica; font-weight:400; text-align:center; text-transform: uppercase; letter-spacing: 5px;">Your Guest Id: {GuestId}</td>
+                  <td style="font-size:18px; color:#fff; font-family: 'Montserrat', sans-serif, Arial, Helvetica; font-weight:400; text-align:center; text-transform: uppercase; letter-spacing: 5px;">Your Guest ID: ${guestId}</td>
                 </tr>
                 <tr>
                   <td style="text-align:center"><img border="0"  src="images/line.jpg" alt="" title="" /></td>
@@ -183,55 +195,25 @@ module.exports = ( guest, bride, groom, date, guestId, invitationId ) => {
                   <td height="44"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
                 </tr>
                 <tr>
-                  <td style="text-align:center; font-size:16px; color:#ffffff; font-size: 16px; letter-spacing: 5px; line-height: 18px;" class="letter-spacing">Request the honor of your presence
+                  <td style="text-align:center; font-size:16px; color:#ffffff; font-size: 16px; letter-spacing: 3px; line-height: 18px;" class="letter-spacing">Request the honor of your presence
                   <br/>
-                  at our wedding day that will be held on </td>
+                  at our wedding day </td>
                 </tr>
                 <tr>
                   <td height="26"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
                 </tr>
-                <tr>
-                  <td style="font-size: 18px; color:#b3965a; text-align:center; word-spacing:9px; letter-spacing:3px;" class="letter-spacing word-spacing">{date=>> Saturday, twenty five July 2017}</td>
-                </tr>
-                <tr>
-                  <td height="87"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
-                </tr>
-                <tr>
-                  <td style="font-size: 16px; color:#ffffff; text-align: center; letter-spacing: 3px; word-spacing:1px; font-weight:700;">warm regards,</td>
-                </tr>
-                <tr>
-                  <td height="24"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
-                </tr>
-                <tr>
-                  <td style="font-size: 16px; color:#ffffff; text-align: center; letter-spacing: 3px; word-spacing:1px; font-weight:700;">{BrideName} &amp; {GroomName}</td>
-                </tr>
-                <tr>
-                  <td height="55"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
-                </tr>
+                
               </table></td>
             </tr>
             
             <tr>
               <td>
               <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#212121;">
+              <tr>
+              <td height="26"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
+              </tr>
                 <tr>
-                  <td height="61"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
-                </tr>
-                <tr>
-                  <td style="font-size:24px; color:#fff; font-family: 'Montserrat', sans-serif, Arial, Helvetica; font-weight:400; text-align:center; text-transform: uppercase; letter-spacing: 5px;"><button style="
-                    font-weight: 600;
-                    appearance: none;
-                    outline: 0;
-                    background-color: white;
-                    border: 0;
-                    padding: 10px 15px;
-                    color: @prim;
-                    border-radius: 3px;
-                    width: 250px;
-                    cursor: pointer;
-                    font-size: 20px;
-                    transition-duration: 0.25s;
-                    ">Confirmation</button></td>
+                  <td style="font-size:21px; font-family: 'Montserrat', sans-serif, Arial, Helvetica; font-weight:400; text-align:center; text-transform: uppercase; letter-spacing: 5px;"><a style="color:white;" href="${baseUrl}/guestConfirmation">>> CONFIRMATION  <<</a></td>
                 </tr>
               </table></td>
             </tr>
@@ -240,9 +222,6 @@ module.exports = ( guest, bride, groom, date, guestId, invitationId ) => {
             <tr>
               <td>
               <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#212121;">
-                <tr>
-                  <td height="55"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
-                </tr>
                 <tr>
                   <td>
                   <table cellpadding="0" cellspacing="0" border="0" width="220" align="center" style="text-align:center;">
