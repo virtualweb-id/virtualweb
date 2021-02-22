@@ -25,11 +25,31 @@ class GuestController {
     }
   }
 
+  static async sendEmail(req, res, next) {
+    try {
+      const UserId = req.user.id
+      const guests = await Guest.findAll({
+        order: [['createdAt', 'DESC']],
+        where: { UserId }
+      })
+      const findWedding = await Wedding.findOne({ where: { UserId } })
+      const findInvitation = await Invitation.findOne({ where: { WeddingId: findWedding.id } })
+      const guestList = guests.filter(e => {
+        return e.status === null
+      })
+      guestList.forEach(async (e) => {
+        sendToGuest(e.name, e.email, e.id, findInvitation.id)
+        await Guest.update({ status: false }, { where: { id: e.id } })
+      })
+      res.status(200).json(guestList)
+    } catch (error) {
+      next(error)
+    }
+  }
+
   static async create(req, res, next) {
     try {
       const UserId = req.user.id
-      const findWedding = await Wedding.findOne({ where: { UserId } })
-      const findInvitation = await Invitation.findOne({ where: { WeddingId: findWedding.id } })
       const { name, email, phoneNumber, status } = req.body
       const guest = await Guest.create({
         id: Math.random() * 10e8 | 0,
@@ -39,12 +59,6 @@ class GuestController {
         status: status || null,
         UserId
       })
-      await sendToGuest(
-        name,
-        email,
-        guest.id,
-        findInvitation.id
-      )
       res.status(201).json(guest)
     } catch (err) {
       next(err)
