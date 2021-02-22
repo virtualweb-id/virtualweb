@@ -1,5 +1,5 @@
 const { Guest, User, Wedding, Invitation } = require('../models')
-const { sendToGuest } = require('../helpers')
+const { sendToGuest, sendEventLink } = require('../helpers')
 
 class GuestController {
   static async findAll(req, res, next) {
@@ -33,12 +33,18 @@ class GuestController {
         where: { UserId }
       })
       const findWedding = await Wedding.findOne({ where: { UserId } })
-      const findInvitation = await Invitation.findOne({ where: { WeddingId: findWedding.id } })
       const guestList = guests.filter(e => {
         return e.status === null
       })
       guestList.forEach(async (e) => {
-        sendToGuest(e.name, e.email, e.id, findInvitation.id)
+        sendToGuest( 
+          e.name,
+          e.email,
+          findWedding.brideName,
+          findWedding.groomName,
+          findWedding.date,
+          e.id
+        )
         await Guest.update({ status: false }, { where: { id: e.id } })
       })
       res.status(200).json(guestList)
@@ -91,6 +97,12 @@ class GuestController {
       if (!hasGuest) {
         next({ name: "ErrorNotFound" })
       } else {
+        const { email, UserId } = hasGuest
+        console.log(UserId, '<<<<')
+        const findWeds = await Wedding.findOne({ where: { UserId } })
+        console.log(findWeds)
+        const findInvt = await Invitation.findOne({ where: { WeddingId: findWeds.id } })
+        await sendEventLink(email, findInvt.id)
         const guest = await Guest.update({
           status
         }, {

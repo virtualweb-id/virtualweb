@@ -1,4 +1,4 @@
-module.exports = ( guest, bride, groom, date, guestId, invitationId, baseUrl ) => {
+module.exports = ( guest, bride, groom, date, baseUrl, guestId ) => {
   const content = `
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   <html xmlns="http://www.w3.org/1999/xhtml">
@@ -126,39 +126,39 @@ module.exports = ( guest, bride, groom, date, guestId, invitationId, baseUrl ) =
   
             <tr>
               <td>
-              <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#b3965a;">
+              <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#b3965a; justify-content: center; align-items: center;">
                 <tr>
-                  <td height="66"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
+                  <td height="50"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
                 </tr>
                 <tr>
-                  <td style="font-size:32px; color:#ffffff; text-transform: uppercase; text-align:center; font-family: 'Montserrat', sans-serif, Arial, Helvetica; font-weight:700; letter-spacing:7px; word-spacing:1px;" class="letter-spacing">You're Invited</td>
+                  <td style="font-size:30px; color:#ffffff; text-transform: uppercase; text-align:center; font-family: 'Montserrat', sans-serif, Arial, Helvetica; font-weight:700; letter-spacing:7px; word-spacing:1px;" class="letter-spacing">You're Invited</td>
                 </tr>
                 <tr>
-                  <td height="14"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
+                  <td height="30"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
                 </tr>
                 <tr>
-                  <td style="font-size:21px; color:#ffffff; text-align:center; font-family: 'Cinzel Decorative', sans-serif, Arial, Helvetica; text-transform: uppercase;  word-spacing:2px; letter-spacing: 6px;" class="letter-spacing">${bride}</td>
+                  <td style="font-size:18px; color:#ffffff; text-align:center; font-family: 'Cinzel Decorative', sans-serif, Arial, Helvetica; text-transform: uppercase;  word-spacing:2px; letter-spacing: 6px;" class="letter-spacing">${bride}</td>
                 </tr>
                 <tr>
-                  <td height="8"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
+                  <td height="6"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
                 </tr>
                 <tr>
-                  <td style="font-size:18px; color:#ffffff; text-align:center; font-family: 'Cinzel Decorative', sans-serif, Arial, Helvetica; text-transform: uppercase;  word-spacing:2px; letter-spacing: 6px;" class="letter-spacing">&amp;</td>
+                  <td style="font-size:20px; color:#ffffff; text-align:center; font-family: 'Cinzel Decorative', sans-serif, Arial, Helvetica; text-transform: uppercase;  word-spacing:2px; letter-spacing: 6px;" class="letter-spacing">&amp;</td>
                   <tr>
-                  <td height="8"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
+                  <td height="6"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
                 </tr>
                   <tr>
                   <td style="font-size:18px; color:#ffffff; text-align:center; font-family: 'Cinzel Decorative', sans-serif, Arial, Helvetica; text-transform: uppercase;  word-spacing:2px; letter-spacing: 6px;" class="letter-spacing">${groom}</td>
                 </tr>
                 </tr>
                 <tr>
+                  <td height="28"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
+                </tr>
+                <tr>
+                  <td style="font-size:16px; color:#92763d; font-weight:700; text-align: center; text-transform: uppercase;  word-spacing:4px; letter-spacing: 5px;">${date}</td>
+                </tr>
+                <tr>
                   <td height="25"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
-                </tr>
-                <tr>
-                  <td style="font-size:16px; color:#92763d; font-weight:700; text-align: center; text-transform: uppercase;  word-spacing:2px; letter-spacing: 2px;">${date}</td>
-                </tr>
-                <tr>
-                  <td height="30"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
                 </tr>
   
               </table></td>
@@ -175,7 +175,7 @@ module.exports = ( guest, bride, groom, date, guestId, invitationId, baseUrl ) =
   
             <tr>
               <td>
-              <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#212121;">
+              <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#212121; justify-content: center; align-items: center;">
                 <tr>
                   <td height="40"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
                 </tr>
@@ -213,7 +213,7 @@ module.exports = ( guest, bride, groom, date, guestId, invitationId, baseUrl ) =
               <td height="26"><img border="0"  src="images/spacer.gif" height="1" width="1" alt="" title="" /></td>
               </tr>
                 <tr>
-                  <td style="font-size:21px; font-family: 'Montserrat', sans-serif, Arial, Helvetica; font-weight:400; text-align:center; text-transform: uppercase; letter-spacing: 5px;"><a style="color:white;" href="${baseUrl}/guestConfirmation">>> CONFIRMATION  <<</a></td>
+                  <td style="font-size:21px; font-family: 'Montserrat', sans-serif, Arial, Helvetica; font-weight:400; text-align:center; text-transform: uppercase; letter-spacing: 5px;"><a style="color:#ffe05d;" href="${baseUrl}/guestConfirmation">>> CONFIRMATION  <<</a></td>
                 </tr>
               </table></td>
             </tr>
