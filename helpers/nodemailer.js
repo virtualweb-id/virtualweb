@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer')
-const contentMail = require('./mail')
+const moment = require('moment')
+const { guestConfirm, eventLink } = require('./nodemailer_template')
 
 const sendToUser = (name, email) => {
   const output = `
@@ -36,10 +37,10 @@ const sendToUser = (name, email) => {
   return transporter.sendMail(mailOptions)
 }
 
-const sendToGuest = (name, email, url1, url2) => {
+const sendToGuest = ( guest, guestEmail, bride, groom, date, guestId ) => {
   const baseUrl = 'http://localhost:3000'
-
-  const output = contentMail(name, name, name, name, name, name)
+  const formatDate = moment(date).format("dddd, MMMM Do, YYYY")
+  const output = guestConfirm( guest, bride, groom, formatDate, baseUrl, guestId )
   
   let transporter = nodemailer.createTransport({
     service: process.env.MAILER_PROVIDER,
@@ -57,7 +58,35 @@ const sendToGuest = (name, email, url1, url2) => {
 
   const mailOptions = {
     from: `"Undanganku" <${process.env.MAILER_PROVIDER}>`, // sender address
-    to: `${email}`, // list of receivers
+    to: `${guestEmail}`, // list of receivers
+    subject: `You're invited!`, // Subject line
+    html: output // html body
+  }
+
+  return transporter.sendMail(mailOptions)
+}
+
+const sendEventLink = ( guestEmail, invitationId ) => {
+  const baseUrl = 'http://localhost:3000'
+  const output = eventLink((baseUrl, invitationId))
+  
+  let transporter = nodemailer.createTransport({
+    service: process.env.MAILER_PROVIDER,
+    host: `${process.env.MAILER_PROVIDER}.com`,
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.MAILER_EMAIL, // generated ethereal user
+      pass: process.env.MAILER_PASS // generated ethereal password
+    },
+    tls: {
+      rejectUnauthorized: false
+    }
+  })
+
+  const mailOptions = {
+    from: `"Undanganku" <${process.env.MAILER_PROVIDER}>`, // sender address
+    to: `${guestEmail}`, // list of receivers
     subject: `You're invited!`, // Subject line
     html: output // html body
   }
@@ -66,5 +95,4 @@ const sendToGuest = (name, email, url1, url2) => {
 }
 
 
-
-module.exports = { sendToUser, sendToGuest }
+module.exports = { sendToUser, sendToGuest, sendEventLink }

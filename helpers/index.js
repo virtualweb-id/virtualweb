@@ -1,6 +1,6 @@
 const { hashPwd, comparePwd } = require('./bcrypt')
 const { generateToken,verifyToken } = require('./jwt')
-const { sendToUser, sendToGuest } = require('./nodemailer')
+const { sendToUser, sendToGuest, sendEventLink } = require('./nodemailer')
 
 module.exports = {
   hashPwd,
@@ -9,5 +9,6 @@ module.exports = {
   verifyToken,
   sendToUser,
   sendToGuest,
+  sendEventLink,
   cloudinary: require('./cloudinary')
 }
