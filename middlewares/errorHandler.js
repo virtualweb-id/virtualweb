@@ -1,5 +1,4 @@
 const errorHandler = (err, req, res, next) => {
-  console.log(err)
   const objErr = (code, message) => {
     return res.status(code).json({
       status: 'Error',

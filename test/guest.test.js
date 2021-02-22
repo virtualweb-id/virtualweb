@@ -2,6 +2,7 @@ const request = require('supertest')
 const app = require('../app')
 const { sequelize } = require('../models')
 const { queryInterface } = sequelize
+const nock = require('nock')
 const { hashPwd, generateToken } = require('../helpers')
 
 const passTest = 'password'
@@ -38,7 +39,6 @@ let addGuestTest = {
   name: 'Giant',
   email: 'giantgendut@mail.com',
   phoneNumber: '081289272900',
-  status: false,
   UserId: 0,
   createdAt: new Date(),
   updatedAt: new Date()
@@ -47,8 +47,20 @@ let addOtherGuestTest = {
   name: 'Suneo',
   email: 'suneosombong@mail.com',
   phoneNumber: '081289272900',
-  status: false,
   UserId: 0,
+  createdAt: new Date(),
+  updatedAt: new Date()
+}
+let invitationTest = {
+  WeddingId: 0,
+  brigeNickname: '',
+  groomNickname: '',
+  story: "Your story here",
+  title: "Title",
+  backgroundColor: '#1687a7',
+  textColor: '#d3e0ea',
+  timeEvent1: '8.00',
+  timeEvent2: '11.00',
   createdAt: new Date(),
   updatedAt: new Date()
 }
@@ -56,7 +68,6 @@ let access_token
 let wrong_access_token
 let idGuest
 let wrong_idGuest
-let idWeds
 
 beforeAll(done => {
   queryInterface.bulkInsert('Users', [userTest], { returning: true })
@@ -68,8 +79,15 @@ beforeAll(done => {
       return queryInterface.bulkInsert('Weddings', [addWeddingTest], { returning: true })
     })
     .then(weddings => {
-      idWeds = weddings[0].id
-      addGuestTest.UserId = weddings[0].UserId
+      const { id, groomName, brideName, UserId } = weddings[0]
+      idWeds = id
+      addGuestTest.UserId = UserId
+      invitationTest.WeddingId = id
+      invitationTest.brigeNickname = brideName
+      invitationTest.groomNickname = groomName
+      return queryInterface.bulkInsert('Invitations', [ invitationTest ])
+    })
+    .then(() => {
       return queryInterface.bulkInsert('Guests', [addGuestTest], { returning: true })
     })
     .then(guests => {
@@ -267,22 +285,66 @@ describe('GET /guests', () => {
       })
   })
 
-  test("response with internal server error", (done) => {
+  test(`Case 3: Don't have access token`, done => {
     request(app)
-      .get("/guests")
-      .set("access_token", "access_token")
+      .get('/guests')
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(403)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'ErrorAccessToken')
+        expect(body).toHaveProperty('message', 'Jwt needed')
+        done()
+      })
+  })
+
+  test('Case 4: Access token malformed', (done) => {
+    request(app)
+      .get('/guests')
+      .set('access_token', 'access_token')
       .end((err, res) => {
         const { status, body } = res
         if (err) return done(err)
         expect(status).toBe(500)
-        expect(body.error).toHaveProperty("message", "jwt malformed")
+        expect(body.error).toHaveProperty('message', 'jwt malformed')
+        done()
+      })
+  })
+})
+
+describe('GET /guests/send', () => {
+  test('Case 1: Success send email to all guest', done => {
+    request(app)
+      .get('/guests/send')
+      .set('access_token', access_token)
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(200)
+        expect(body).toEqual(expect.arrayContaining([]))
+        done()
+      })
+  })
+
+  test('Case 2: Wrong access token', done => {
+    request(app)
+      .get('/guests/send')
+      .set('access_token', wrong_access_token)
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'ErrorAuthenticate')
+        expect(body).toHaveProperty('message', 'you need to login first')
         done()
       })
   })
 
   test(`Case 3: Don't have access token`, done => {
     request(app)
-      .get('/guests')
+      .get('/guests/send')
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
@@ -503,21 +565,6 @@ describe('PATCH /guests/:id', () => {
         done()
       })
   })
-
-  // test('Case 3: M', done => {
-  //   request(app)
-  //     .patch(`/guests/${idGuest + 5}`)
-  //     .set('access_token', access_token)
-  //     .end((err, res) => {
-  //       if (err) return done(err)
-  //       const { body, status } = res
-  //       expect(status).toBe(404)
-  //       expect(body).toHaveProperty('status', 'Error')
-  //       expect(body).toHaveProperty('name', 'ErrorNotFound')
-  //       expect(body).toHaveProperty('message', 'not found')
-  //       done()
-  //     })
-  // })
 })
 
 describe('DELETE /guests/:id', () => {
