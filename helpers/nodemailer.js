@@ -66,9 +66,9 @@ const sendToGuest = ( guest, guestEmail, bride, groom, date, guestId ) => {
   return transporter.sendMail(mailOptions)
 }
 
-const sendEventLink = ( guestEmail, invitationId ) => {
+const sendEventLink = ( brideName, groomName, guestEmail, invitationId ) => {
   const baseUrl = 'http://localhost:3000'
-  const output = eventLink((baseUrl, invitationId))
+  const output = eventLink(brideName, groomName, baseUrl, invitationId)
   
   let transporter = nodemailer.createTransport({
     service: process.env.MAILER_PROVIDER,
