@@ -2,7 +2,7 @@ const request = require('supertest')
 const app = require('../app')
 const { sequelize } = require('../models')
 const { queryInterface } = sequelize
-const { hashPwd, generateToken, verifyToken } = require('../helpers')
+const { hashPwd } = require('../helpers')
 const dummy = 'https://www.faitron.com/wp-content/uploads/2018/08/dummy.jpg'
 
 const passTest = 'password'
@@ -67,7 +67,7 @@ beforeAll(done => {
       invitationTest.WeddingId = id
       invitationTest.brigeNickname = brideName
       invitationTest.groomNickname = groomName
-      return queryInterface.bulkInsert('Invitations', [ invitationTest ], { returning: true })
+      return queryInterface.bulkInsert('Invitations', [invitationTest], { returning: true })
     })
     .then(inv => {
       const { id } = inv[0]
@@ -110,7 +110,7 @@ describe('POST /comments', () => {
         expect(status).toBe(400)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'SequelizeForeignKeyConstraintError')
-        expect(body).toHaveProperty('message', 'invalid constrain error')
+        expect(body).toHaveProperty('message', 'invalid constraint error')
         done()
       })
   })

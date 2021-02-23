@@ -201,8 +201,6 @@ describe('POST /weddings', () => {
         const { body, status } = res
         expect(status).toBe(400)
         expect(body).toHaveProperty('status', 'Error')
-        // expect(body).toHaveProperty('name', 'SequelizeValidationError')
-        // expect(body).toHaveProperty('message', ['Date is required'])
         done()
       })
   })
@@ -525,7 +523,6 @@ describe('PUT /weddings/:id', () => {
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
-        console.log(wrong_idWeds)
         expect(status).toBe(403)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthorize')
@@ -610,7 +607,6 @@ describe('DELETE /weddings/:id', () => {
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
-        console.log(wrong_idWeds)
         expect(status).toBe(403)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthorize')
