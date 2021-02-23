@@ -1,5 +1,4 @@
 const errorHandler = (err, req, res, next) => {
-  console.log(err)
   const objErr = (code, message) => {
     return res.status(code).json({
       status: 'Error',
@@ -14,6 +13,9 @@ const errorHandler = (err, req, res, next) => {
     case "SequelizeUniqueConstraintError":
       objErr(400, err.errors.map(e => e.message))
       break;
+    case "EmptyFile":
+      objErr(400, 'excel was empty')
+      break;
     case "InvalidPassOrEmail":
       objErr(401, 'wrong email / password')
       break;
@@ -24,7 +26,7 @@ const errorHandler = (err, req, res, next) => {
       objErr(403, 'you dont have access')
       break;
     case "SequelizeForeignKeyConstraintError":
-      objErr(400, 'invalid constrain error')
+      objErr(400, 'invalid constraint error')
       break;
     case "ErrorAccessToken":
       objErr(403, 'Jwt needed')

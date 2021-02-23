@@ -2,7 +2,6 @@ const request = require('supertest')
 const app = require('../app')
 const { sequelize } = require('../models')
 const { queryInterface } = sequelize
-const nock = require('nock')
 const { hashPwd, generateToken } = require('../helpers')
 
 const passTest = 'password'
@@ -253,6 +252,68 @@ describe('POST /guest', () => {
         ]))
         done()
       })
+  })
+})
+
+describe('POST /guests/upload', () => {
+  const filePath = `${__dirname}/testFiles/template.xlsx`
+  const blankFilePath = `${__dirname}/testFiles/blank.xlsx`
+  const wrongFile = `${__dirname}/testFiles/dummy.jpg`
+
+  test('Case 1: Success upload excel file', done => {
+    request(app)
+      .post('/guests/upload')
+      .set('access_token', access_token)
+      .attach('file', filePath)
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(201)
+        expect(body).toEqual(expect.arrayContaining([]))
+        done()
+      })      
+  })
+
+  test('Case 2: File was empty', done => {
+    request(app)
+      .post('/guests/upload')
+      .set('access_token', access_token)
+      .attach('file', blankFilePath)
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(400)
+        done()
+      })      
+  })
+
+  test('Case 3: Wrong access token', done => {
+    request(app)
+      .post('/guests/upload')
+      .set('access_token', wrong_access_token)
+      .attach('file', filePath)
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'ErrorAuthenticate')
+        expect(body).toHaveProperty('message', 'you need to login first')
+        done()
+      })      
+  })
+
+  test('Case 4: Wrong file format', done => {
+    request(app)
+      .post('/guests/upload')
+      .set('access_token', access_token)
+      .attach('file', wrongFile)
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(500)
+        done()
+      })      
   })
 })
 
@@ -541,7 +602,6 @@ describe('PATCH /guests/:id', () => {
       .end((err, res) => {
         if (err) return done(err)
         const { body, status } = res
-        console.log(idGuest)
         expect(status).toBe(200)
         expect(body).toHaveProperty('status', true)
         done()

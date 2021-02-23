@@ -1,5 +1,6 @@
-const { Guest, User, Wedding, Invitation } = require('../models')
+const { Guest, Wedding, Invitation } = require('../models')
 const { sendToGuest, sendEventLink } = require('../helpers')
+const readXlsxFile = require('read-excel-file/node')
 const snap = require('../helpers/midtrans')
 
 class GuestController {
@@ -100,7 +101,6 @@ class GuestController {
       } else {
         const { email, UserId } = hasGuest
         const findWeds = await Wedding.findOne({ where: { UserId } })
-        console.log(findWeds)
         const findInvt = await Invitation.findOne({ where: { WeddingId: findWeds.id } })
         await sendEventLink(findWeds.brideName, findWeds.groomName, email, findInvt.id)
         const guest = await Guest.update({
@@ -126,6 +126,35 @@ class GuestController {
     }
   }
 
+  static async uploadGuest(req, res, next) {
+    try {
+      const UserId = req.user.id
+      let path = __basedir + '/uploads/' + req.file.filename;
+      let data = [];
+      const rows = await readXlsxFile(path)
+      await rows.shift()
+      for (let i = 0; i < rows.length; i++) {
+        let datum = {
+          id: Math.random() * 10e8 | 0,
+          name: rows[i][0],
+          email: rows[i][1],
+          phoneNumber: rows[i][2],
+          UserId
+        }
+        const filterGuest = await Guest.findOne({ where: { email: datum.email } })
+        if (!filterGuest) data.push(datum)
+      }
+      if (data.length) {
+        await Guest.bulkCreate(data)
+        res.status(201).json({ message: 'uploaded' })
+      } else {
+        next({ name: 'EmptyFile' })
+      }
+    } catch (error) {
+      next(error)
+    }
+  }
+  
   static async payment(req, res, next) {
     const {inputData} = req.body
     try {
