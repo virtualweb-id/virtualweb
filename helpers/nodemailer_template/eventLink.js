@@ -1,4 +1,4 @@
-module.exports = (baseUrl, invitationId) => {
+module.exports = (bride, groom, baseUrl, invitationId) => {
   const content = `
   <!DOCTYPE html
   PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -193,7 +193,7 @@ module.exports = (baseUrl, invitationId) => {
             <tr>
               <td
                 style="font-size:16px; color:#92763d; font-weight:700; text-align: center; text-transform: uppercase;  word-spacing:4px; letter-spacing: 5px;">
-                -Nobita & Shizuka-</td>
+                -${bride} & ${groom}-</td>
             </tr>
             <tr>
               <td height="25"><img border="0" height="1" width="1" alt="" title="" /></td>
@@ -241,8 +241,8 @@ module.exports = (baseUrl, invitationId) => {
             </tr>
             <tr>
               <td
-                style="font-size:23px; font-family: 'Montserrat', sans-serif, Arial, Helvetica; font-weight:400; text-align:center; text-transform: uppercase; letter-spacing: 5px;">>>
-                <a style="color:#ffe05d;" href="${baseUrl}/event/${invitationId}"> 💕 </a><<
+                style="font-size:23px; font-family: 'Montserrat', sans-serif, Arial, Helvetica; font-weight:400; text-align:center; text-transform: uppercase; letter-spacing: 5px; justify-content: center; align-items:center;">>>
+                <a style="color:#ffe05d; font-size:40px;" href="${baseUrl}/event/${invitationId}"> 💕 </a><<
               </td>
             </tr>
           </table>

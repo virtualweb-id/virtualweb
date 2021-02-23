@@ -98,11 +98,10 @@ class GuestController {
         next({ name: "ErrorNotFound" })
       } else {
         const { email, UserId } = hasGuest
-        console.log(UserId, '<<<<')
         const findWeds = await Wedding.findOne({ where: { UserId } })
         console.log(findWeds)
         const findInvt = await Invitation.findOne({ where: { WeddingId: findWeds.id } })
-        await sendEventLink(email, findInvt.id)
+        await sendEventLink(findWeds.brideName, findWeds.groomName, email, findInvt.id)
         const guest = await Guest.update({
           status
         }, {
