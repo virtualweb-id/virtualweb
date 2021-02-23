@@ -1,5 +1,6 @@
 const { Guest, User, Wedding, Invitation } = require('../models')
 const { sendToGuest, sendEventLink } = require('../helpers')
+const snap = require('../helpers/midtrans')
 
 class GuestController {
   static async findAll(req, res, next) {
@@ -120,6 +121,31 @@ class GuestController {
       const { id } = req.params
       await Guest.destroy({ where: { id } })
       res.status(200).json({ message: 'Delete guest successful' })
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  static async payment(req, res, next) {
+    const {inputData} = req.body
+    try {
+      let parameter = {
+        "transaction_details": {
+            "order_id": `${Math.ceil(Math.random()*9)}`,
+            "gross_amount": +inputData.amount
+        },
+        "credit_card":{
+            "secure" : true
+        },
+        "customer_details": {
+            "first_name": inputData.firstName,
+            "last_name": inputData.lastName,
+            "email": inputData.email,
+            "phone": inputData.phone
+        }
+      };
+      const transaction = await snap.createTransaction(parameter)
+      res.status(200).json({redirect_url: transaction.redirect_url});
     } catch (err) {
       next(err)
     }
