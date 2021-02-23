@@ -700,3 +700,25 @@ describe('DELETE /guests/:id', () => {
       })
   })
 })
+
+// describe('POST /guests/payment', () => {
+//   test('Case 1: Success transfer money', done => {
+//     request(app)
+//       .post('/guests/payment')
+//       .send({
+//         firstName: 'Naruto',
+//         lastName: 'Sasuke',
+//         email: 'naruke@mail.com',
+//         phone: '727727727',
+//         amount: '24000'
+//       })
+//       .end((err, res) => {
+//         if (err) {
+//           return done(err)
+//         }
+//         const { body, status } = res
+//         expect(status).toBe(200)
+//         done()
+//       })
+//   })
+// })

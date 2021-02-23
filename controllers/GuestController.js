@@ -39,7 +39,7 @@ class GuestController {
         return e.status === null
       })
       guestList.forEach(async (e) => {
-        sendToGuest( 
+        sendToGuest(
           e.name,
           e.email,
           findWedding.brideName,
@@ -154,27 +154,27 @@ class GuestController {
       next(error)
     }
   }
-  
+
   static async payment(req, res, next) {
-    const {inputData} = req.body
+    const { inputData } = req.body
     try {
       let parameter = {
-        "transaction_details": {
-            "order_id": `${Math.ceil(Math.random()*9)}`,
-            "gross_amount": +inputData.amount
+        'transaction_details': {
+          'order_id': `${Math.ceil(Math.random() * 9)}`,
+          'gross_amount': +inputData.amount
         },
-        "credit_card":{
-            "secure" : true
+        'credit_card': {
+          'secure': true
         },
-        "customer_details": {
-            "first_name": inputData.firstName,
-            "last_name": inputData.lastName,
-            "email": inputData.email,
-            "phone": inputData.phone
+        'customer_details': {
+          'first_name': inputData.firstName,
+          'last_name': inputData.lastName,
+          'email': inputData.email,
+          'phone': inputData.phone
         }
       };
       const transaction = await snap.createTransaction(parameter)
-      res.status(200).json({redirect_url: transaction.redirect_url});
+      res.status(200).json({ redirect_url: transaction.redirect_url });
     } catch (err) {
       next(err)
     }
