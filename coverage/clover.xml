@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1614181368744" clover="3.2.0">
-  <project timestamp="1614181368744" name="All files">
+<coverage generated="1614181975756" clover="3.2.0">
+  <project timestamp="1614181975756" name="All files">
     <metrics statements="462" coveredstatements="447" conditionals="167" coveredconditionals="130" methods="57" coveredmethods="57" elements="686" coveredelements="634" complexity="0" loc="462" ncloc="462" packages="8" files="33" classes="33"/>
     <package name="virtualweb-server">
       <metrics statements="12" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -131,12 +131,12 @@
         <line num="152" count="1" type="stmt"/>
         <line num="153" count="1" type="stmt"/>
         <line num="156" count="1" type="stmt"/>
-        <line num="161" count="2" type="stmt"/>
-        <line num="162" count="2" type="stmt"/>
-        <line num="163" count="2" type="stmt"/>
-        <line num="178" count="2" type="stmt"/>
+        <line num="161" count="1" type="stmt"/>
+        <line num="162" count="1" type="stmt"/>
+        <line num="163" count="1" type="stmt"/>
+        <line num="178" count="1" type="stmt"/>
         <line num="179" count="0" type="stmt"/>
-        <line num="181" count="2" type="stmt"/>
+        <line num="181" count="1" type="stmt"/>
         <line num="186" count="5" type="stmt"/>
       </file>
       <file name="InvitationController.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/InvitationController.js">
@@ -380,9 +380,9 @@
       <file name="errorHandler.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/middlewares/errorHandler.js">
         <metrics statements="25" coveredstatements="25" conditionals="10" coveredconditionals="10" methods="4" coveredmethods="4"/>
         <line num="1" count="5" type="stmt"/>
-        <line num="2" count="75" type="stmt"/>
+        <line num="2" count="74" type="stmt"/>
         <line num="3" count="65" type="stmt"/>
-        <line num="9" count="75" type="cond" truecount="10" falsecount="0"/>
+        <line num="9" count="74" type="cond" truecount="10" falsecount="0"/>
         <line num="11" count="33" type="stmt"/>
         <line num="12" count="18" type="stmt"/>
         <line num="14" count="1" type="stmt"/>
@@ -401,8 +401,8 @@
         <line num="33" count="12" type="stmt"/>
         <line num="35" count="8" type="stmt"/>
         <line num="36" count="8" type="stmt"/>
-        <line num="38" count="10" type="stmt"/>
-        <line num="42" count="10" type="stmt"/>
+        <line num="38" count="9" type="stmt"/>
+        <line num="42" count="9" type="stmt"/>
         <line num="46" count="5" type="stmt"/>
       </file>
       <file name="index.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/middlewares/index.js">
