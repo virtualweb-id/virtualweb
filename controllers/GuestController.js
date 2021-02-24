@@ -1,7 +1,6 @@
 const { Guest, Wedding, Invitation } = require('../models')
-const { sendToGuest, sendEventLink } = require('../helpers')
+const { sendToGuest, sendEventLink, snap } = require('../helpers')
 const readXlsxFile = require('read-excel-file/node')
-const snap = require('../helpers/midtrans')
 
 class GuestController {
   static async findAll(req, res, next) {
@@ -144,11 +143,14 @@ class GuestController {
         const filterGuest = await Guest.findOne({ where: { email: datum.email } })
         if (!filterGuest) data.push(datum)
       }
-      if (data.length) {
+
+      if (!data.length) next({ name: 'EmptyFile' })
+      else if (data.length !== rows.length) {
         await Guest.bulkCreate(data)
-        res.status(201).json({ message: 'uploaded' })
+        res.status(201).json({ message: `Uploaded. But some were not uploaded because guest's email have been registered` })
       } else {
-        next({ name: 'EmptyFile' })
+        await Guest.bulkCreate(data)
+        res.status(201).json({ message: 'Success uploaded' })
       }
     } catch (error) {
       next(error)
@@ -156,21 +158,21 @@ class GuestController {
   }
 
   static async payment(req, res, next) {
-    const { inputData } = req.body
+    const { firstName, lastName, email, phone, amount } = req.body
     try {
       let parameter = {
         'transaction_details': {
-          'order_id': `${Math.ceil(Math.random() * 9)}`,
-          'gross_amount': +inputData.amount
+          'order_id': `${Math.ceil(Math.random() * 1e9)}`,
+          'gross_amount': +amount
         },
         'credit_card': {
           'secure': true
         },
         'customer_details': {
-          'first_name': inputData.firstName,
-          'last_name': inputData.lastName,
-          'email': inputData.email,
-          'phone': inputData.phone
+          'first_name': firstName,
+          'last_name': lastName,
+          'email': email,
+          'phone': phone
         }
       };
       const transaction = await snap.createTransaction(parameter)

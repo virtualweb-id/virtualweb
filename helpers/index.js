@@ -10,5 +10,6 @@ module.exports = {
   sendToUser,
   sendToGuest,
   sendEventLink,
-  cloudinary: require('./cloudinary')
+  cloudinary: require('./cloudinary'),
+  snap: require('./midtrans')
 }

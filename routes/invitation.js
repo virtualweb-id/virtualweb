@@ -1,5 +1,5 @@
 const InvitationController = require('../controllers/InvitationController')
-const { authorizeInvitation } = require('../middlewares/auth')
+const { authorizeInvitation } = require('../middlewares')
 
 const router = require('express').Router()
 

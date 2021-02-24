@@ -68,7 +68,8 @@ let idWeds
 let wrong_idWeds
 let idInvt
 
-beforeAll(done => {
+beforeAll((done) => {
+  jest.setTimeout(30000)
   queryInterface.bulkInsert('Users', [userTest], { returning: true })
     .then(user => {
       const { id, email } = user[0]
@@ -102,7 +103,7 @@ beforeAll(done => {
     .catch(err => done(err))
 })
 
-afterAll(done => {
+afterAll((done) => {
   queryInterface.bulkDelete('Users')
     .then(() => { return queryInterface.bulkDelete('Weddings') })
     .then(() => { return queryInterface.bulkDelete('Invitations') })
@@ -111,7 +112,7 @@ afterAll(done => {
 })
 
 describe('GET /invitations', () => {
-  test('Case 1: Success get invitation info', done => {
+  test('Case 1: Success get invitation info', (done) => {
     request(app)
       .get('/invitations')
       .set('access_token', access_token)
@@ -124,7 +125,7 @@ describe('GET /invitations', () => {
       })
   })
 
-  test(`Case 2: Wrong access token`, done => {
+  test(`Case 2: Wrong access token`, (done) => {
     request(app)
       .get('/invitations')
       .set('access_token', wrong_access_token)
@@ -134,12 +135,12 @@ describe('GET /invitations', () => {
         expect(status).toBe(401)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthenticate')
-        expect(body).toHaveProperty('message', 'you need to login first')
+        expect(body).toHaveProperty('message', 'You need to login first')
         done()
       })
   })
 
-  test(`Case 3: Don't have access token`, done => {
+  test(`Case 3: Don't have access token`, (done) => {
     request(app)
       .get('/invitations')
       .end((err, res) => {
@@ -153,7 +154,7 @@ describe('GET /invitations', () => {
       })
   })
 
-  test(`Case 4: Don't have invitation form`, done => {
+  test(`Case 4: Don't have invitation form`, (done) => {
     request(app)
       .get('/invitations')
       .set('access_token', other_access_token)
@@ -163,14 +164,14 @@ describe('GET /invitations', () => {
         expect(status).toBe(404)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorNotFound')
-        expect(body).toHaveProperty('message', 'not found')
+        expect(body).toHaveProperty('message', 'Not found')
         done()
       })
   })
 })
 
 describe('GET /events/:id', () => {
-  test('Case 1: Success get event page', done => {
+  test('Case 1: Success get event page', (done) => {
     request(app)
       .get(`/events/${idInvt}`)
       .end((err, res) => {
@@ -184,7 +185,7 @@ describe('GET /events/:id', () => {
 })
 
 describe('PUT /invitations/:id', () => {
-  test('Case 1: Success update invitation info', done => {
+  test('Case 1: Success update invitation info', (done) => {
     request(app)
       .put(`/invitations/${idInvt}`)
       .set('access_token', access_token)
@@ -211,7 +212,35 @@ describe('PUT /invitations/:id', () => {
       })
   })
 
-  test('Case 2: Wrong access token', done => {
+  test('Case 2: Database error', (done) => {
+    request(app)
+      .put(`/invitations/${idInvt}`)
+      .set('access_token', access_token)
+      .send({
+        brigeNickname: 'Shizukaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        groomNickname: 'Nobita',
+        story: 'Your story here',
+        title: 'Title',
+        backgroundImg: dummy,
+        additionalImg: dummy,
+        videoUrl: 'Ini video',
+        backgroundColor: '#1687a7',
+        textColor: '#d3e0ea',
+        timeEvent1: '8.00',
+        timeEvent2: '11.00',
+        youtubeUrl: 'https://youtube.com'
+      })
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body.error).toHaveProperty('name', 'SequelizeDatabaseError')
+        done()
+      })
+  })
+
+  test('Case 2: Wrong access token', (done) => {
     request(app)
       .put(`/invitations/${idInvt}`)
       .set('access_token', wrong_access_token)
@@ -235,12 +264,12 @@ describe('PUT /invitations/:id', () => {
         expect(status).toBe(401)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthenticate')
-        expect(body).toHaveProperty('message', 'you need to login first')
+        expect(body).toHaveProperty('message', 'You need to login first')
         done()
       })
   })
 
-  test(`Case 3: Don't have access token`, done => {
+  test(`Case 3: Don't have access token`, (done) => {
     request(app)
       .put(`/invitations/${idInvt}`)
       .send({
@@ -268,7 +297,7 @@ describe('PUT /invitations/:id', () => {
       })
   })
 
-  test('Case 4: Wrong invitation ID (Different User ID)', done => {
+  test('Case 4: Wrong invitation ID (Different User ID)', (done) => {
     request(app)
       .put(`/invitations/${idInvt}`)
       .set('access_token', other_access_token)
@@ -292,12 +321,12 @@ describe('PUT /invitations/:id', () => {
         expect(status).toBe(403)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthorize')
-        expect(body).toHaveProperty('message', 'you dont have access')
+        expect(body).toHaveProperty('message', 'You dont have access')
         done()
       })
   })
 
-  test('Case 5: Invitation ID not found', done => {
+  test('Case 5: Invitation ID not found', (done) => {
     request(app)
       .put(`/invitations/${idInvt + 5}`)
       .set('access_token', access_token)
@@ -321,7 +350,7 @@ describe('PUT /invitations/:id', () => {
         expect(status).toBe(404)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorNotFound')
-        expect(body).toHaveProperty('message', 'not found')
+        expect(body).toHaveProperty('message', 'Not found')
         done()
       })
   })

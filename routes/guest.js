@@ -1,7 +1,6 @@
 const router = require('express').Router()
 const GuestController = require('../controllers/GuestController')
-const { authorizeGuest } = require('../middlewares/auth')
-const uploadFile = require('../middlewares/multerHandler')
+const { authorizeGuest, uploadFile } = require('../middlewares')
 
 router.post('/', GuestController.create)
 router.get('/', GuestController.findAll)
