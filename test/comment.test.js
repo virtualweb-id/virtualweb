@@ -54,7 +54,8 @@ let otherCommentTest = {
 }
 let idInvt
 
-beforeAll(done => {
+beforeAll((done) => {
+  jest.setTimeout(30000)
   queryInterface.bulkInsert('Users', [userTest], { returning: true })
     .then(user => {
       const { id } = user[0]
@@ -78,7 +79,7 @@ beforeAll(done => {
     .catch(err => done(err))
 })
 
-afterAll(done => {
+afterAll((done) => {
   queryInterface.bulkDelete('Users')
     .then(() => { return queryInterface.bulkDelete('Weddings') })
     .then(() => { return queryInterface.bulkDelete('Invitations') })
@@ -87,7 +88,7 @@ afterAll(done => {
 })
 
 describe('POST /comments', () => {
-  test('Case 1: Success post a comment', done => {
+  test('Case 1: Success post a comment', (done) => {
     request(app)
       .post('/comments')
       .send(commentTest)
@@ -100,7 +101,7 @@ describe('POST /comments', () => {
       })
   })
 
-  test(`Case 2: Don't have Invitation ID`, done => {
+  test(`Case 2: Don't have Invitation ID`, (done) => {
     request(app)
       .post('/comments')
       .send(otherCommentTest)
@@ -110,14 +111,14 @@ describe('POST /comments', () => {
         expect(status).toBe(400)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'SequelizeForeignKeyConstraintError')
-        expect(body).toHaveProperty('message', 'invalid constraint error')
+        expect(body).toHaveProperty('message', 'Invalid constraint error')
         done()
       })
   })
 })
 
 describe('GET /comments/:id', () => {
-  test('Case 1: Success get all comment', done => {
+  test('Case 1: Success get all comment', (done) => {
     request(app)
       .get(`/comments/${idInvt}`)
       .end((err, res) => {

@@ -5,7 +5,7 @@ const weddingRouter = require('./wedding')
 const invitationRouter = require('./invitation')
 const eventRouter = require('./invitationforguest')
 const commentRouter = require('./comment')
-const { authentication } = require('../middlewares/auth')
+const { authentication } = require('../middlewares')
 const GuestController = require('../controllers/GuestController')
 
 router.use('/', authRouter)

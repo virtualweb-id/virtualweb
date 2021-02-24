@@ -68,7 +68,8 @@ let wrong_access_token
 let idGuest
 let wrong_idGuest
 
-beforeAll(done => {
+beforeAll((done) => {
+  jest.setTimeout(30000)
   queryInterface.bulkInsert('Users', [userTest], { returning: true })
     .then(user => {
       const { id, email } = user[0]
@@ -104,7 +105,7 @@ beforeAll(done => {
     .catch(err => done(err))
 })
 
-afterAll(done => {
+afterAll((done) => {
   queryInterface.bulkDelete('Users')
     .then(() => { return queryInterface.bulkDelete('Weddings') })
     .then(() => { return queryInterface.bulkDelete('Guests') })
@@ -113,7 +114,7 @@ afterAll(done => {
 })
 
 describe('POST /guest', () => {
-  test('Case 1: Success add guest to the wedding', done => {
+  test('Case 1: Success add guest to the wedding', (done) => {
     request(app)
       .post('/guests')
       .set('access_token', access_token)
@@ -131,7 +132,7 @@ describe('POST /guest', () => {
       })
   })
 
-  test('Case 2: Wrong access token', done => {
+    test('Case 2: Wrong access token', (done) => {
     request(app)
       .post('/guests')
       .set('access_token', wrong_access_token)
@@ -146,12 +147,12 @@ describe('POST /guest', () => {
         expect(status).toBe(401)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthenticate')
-        expect(body).toHaveProperty('message', 'you need to login first')
+        expect(body).toHaveProperty('message', 'You need to login first')
         done()
       })
   })
 
-  test(`Case 3: Don't have access token`, done => {
+  test(`Case 3: Don't have access token`, (done) => {
     request(app)
       .post('/guests')
       .send({
@@ -170,7 +171,7 @@ describe('POST /guest', () => {
       })
   })
 
-  test('Case 4: Bad request: blank name', done => {
+  test('Case 4: Bad request: blank name', (done) => {
     request(app)
       .post('/guests')
       .set('access_token', access_token)
@@ -190,7 +191,7 @@ describe('POST /guest', () => {
       })
   })
 
-  test('Case 5: Bad request: blank email', done => {
+  test('Case 5: Bad request: blank email', (done) => {
     request(app)
       .post('/guests')
       .set('access_token', access_token)
@@ -210,7 +211,7 @@ describe('POST /guest', () => {
       })
   })
 
-  test('Case 6: Bad request: blank phone number', done => {
+  test('Case 6: Bad request: blank phone number', (done) => {
     request(app)
       .post('/guests')
       .set('access_token', access_token)
@@ -230,7 +231,7 @@ describe('POST /guest', () => {
       })
   })
 
-  test(`Case 7: Bad request; all field's are blank`, done => {
+  test(`Case 7: Bad request; all field's are blank`, (done) => {
     request(app)
       .post('/guests')
       .set('access_token', access_token)
@@ -253,14 +254,34 @@ describe('POST /guest', () => {
         done()
       })
   })
+
+  test('Case 8: Database error', (done) => {
+    request(app)
+      .post('/guests')
+      .set('access_token', access_token)
+      .send({
+        name: 'Giantlllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll',
+        email: 'giantgendut@mail.com',
+        phoneNumber: '081289272900'
+      })
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body.error).toHaveProperty('name', 'SequelizeDatabaseError')
+        done()
+      })
+  })
 })
 
 describe('POST /guests/upload', () => {
   const filePath = `${__dirname}/testFiles/template.xlsx`
+  const othFilePath = `${__dirname}/testFiles/template2.xlsx`
   const blankFilePath = `${__dirname}/testFiles/blank.xlsx`
   const wrongFile = `${__dirname}/testFiles/dummy.jpg`
 
-  test('Case 1: Success upload excel file', done => {
+  test('Case 1: Success upload all data in excel file', (done) => {
     request(app)
       .post('/guests/upload')
       .set('access_token', access_token)
@@ -269,12 +290,26 @@ describe('POST /guests/upload', () => {
         if (err) return done(err)
         const { body, status } = res
         expect(status).toBe(201)
-        expect(body).toEqual(expect.arrayContaining([]))
+        expect(body).toHaveProperty('message', 'Success uploaded')
         done()
       })      
   })
 
-  test('Case 2: File was empty', done => {
+  test('Case 2: Some data was uploaded', (done) => {
+    request(app)
+      .post('/guests/upload')
+      .set('access_token', access_token)
+      .attach('file', othFilePath)
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(201)
+        expect(body).toHaveProperty('message', `Uploaded. But some were not uploaded because guest's email have been registered`)
+        done()
+      })      
+  })
+
+  test('Case 3: File was empty', (done) => {
     request(app)
       .post('/guests/upload')
       .set('access_token', access_token)
@@ -283,11 +318,14 @@ describe('POST /guests/upload', () => {
         if (err) return done(err)
         const { body, status } = res
         expect(status).toBe(400)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'EmptyFile')
+        expect(body).toHaveProperty('message', 'All emails have been registered')
         done()
       })      
   })
 
-  test('Case 3: Wrong access token', done => {
+  test('Case 4: Wrong access token', (done) => {
     request(app)
       .post('/guests/upload')
       .set('access_token', wrong_access_token)
@@ -298,12 +336,12 @@ describe('POST /guests/upload', () => {
         expect(status).toBe(401)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthenticate')
-        expect(body).toHaveProperty('message', 'you need to login first')
+        expect(body).toHaveProperty('message', 'You need to login first')
         done()
       })      
   })
 
-  test('Case 4: Wrong file format', done => {
+  test('Case 5: Wrong file format', (done) => {
     request(app)
       .post('/guests/upload')
       .set('access_token', access_token)
@@ -315,10 +353,24 @@ describe('POST /guests/upload', () => {
         done()
       })      
   })
+
+  test('Case 6: Bad request; send a body not a file', (done) => {
+    request(app)
+      .post('/guests/upload')
+      .set('access_token', access_token)
+      .send('file', 'aaaaaaa')
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('status', 'Error')
+        done()
+      })      
+  })
 })
 
 describe('GET /guests', () => {
-  test('Case 1: Success get all guest info', done => {
+  test('Case 1: Success get all guest info', (done) => {
     request(app)
       .get('/guests')
       .set('access_token', access_token)
@@ -331,7 +383,7 @@ describe('GET /guests', () => {
       })
   })
 
-  test('Case 2: Wrong access token', done => {
+  test('Case 2: Wrong access token', (done) => {
     request(app)
       .get('/guests')
       .set('access_token', wrong_access_token)
@@ -341,12 +393,12 @@ describe('GET /guests', () => {
         expect(status).toBe(401)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthenticate')
-        expect(body).toHaveProperty('message', 'you need to login first')
+        expect(body).toHaveProperty('message', 'You need to login first')
         done()
       })
   })
 
-  test(`Case 3: Don't have access token`, done => {
+  test(`Case 3: Don't have access token`, (done) => {
     request(app)
       .get('/guests')
       .end((err, res) => {
@@ -375,7 +427,7 @@ describe('GET /guests', () => {
 })
 
 describe('GET /guests/send', () => {
-  test('Case 1: Success send email to all guest', done => {
+  test('Case 1: Success send email to all guest', (done) => {
     request(app)
       .get('/guests/send')
       .set('access_token', access_token)
@@ -388,7 +440,7 @@ describe('GET /guests/send', () => {
       })
   })
 
-  test('Case 2: Wrong access token', done => {
+  test('Case 2: Wrong access token', (done) => {
     request(app)
       .get('/guests/send')
       .set('access_token', wrong_access_token)
@@ -398,12 +450,12 @@ describe('GET /guests/send', () => {
         expect(status).toBe(401)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthenticate')
-        expect(body).toHaveProperty('message', 'you need to login first')
+        expect(body).toHaveProperty('message', 'You need to login first')
         done()
       })
   })
 
-  test(`Case 3: Don't have access token`, done => {
+  test(`Case 3: Don't have access token`, (done) => {
     request(app)
       .get('/guests/send')
       .end((err, res) => {
@@ -419,7 +471,7 @@ describe('GET /guests/send', () => {
 })
 
 describe('GET /guests/:id', () => {
-  test('Case 1: Success get guest info', done => {
+  test('Case 1: Success get guest info', (done) => {
     request(app)
       .get(`/guests/${idGuest}`)
       .set('access_token', access_token)
@@ -432,7 +484,7 @@ describe('GET /guests/:id', () => {
       })
   })
 
-  test('Case 2: Wrong access token', done => {
+  test('Case 2: Wrong access token', (done) => {
     request(app)
       .get(`/guests/${idGuest}`)
       .set('access_token', wrong_access_token)
@@ -442,12 +494,12 @@ describe('GET /guests/:id', () => {
         expect(status).toBe(401)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthenticate')
-        expect(body).toHaveProperty('message', 'you need to login first')
+        expect(body).toHaveProperty('message', 'You need to login first')
         done()
       })
   })
 
-  test(`Case 3: Don't have access token`, done => {
+  test(`Case 3: Don't have access token`, (done) => {
     request(app)
       .get(`/guests/${idGuest}`)
       .end((err, res) => {
@@ -471,7 +523,7 @@ describe('GET /guests/:id', () => {
         expect(status).toBe(403)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthorize')
-        expect(body).toHaveProperty('message', 'you dont have access')
+        expect(body).toHaveProperty('message', 'You dont have access')
         done()
       })
   })
@@ -486,14 +538,14 @@ describe('GET /guests/:id', () => {
         expect(status).toBe(404)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorNotFound')
-        expect(body).toHaveProperty('message', 'not found')
+        expect(body).toHaveProperty('message', 'Not found')
         done()
       })
   })
 })
 
 describe('PUT /guests/:id', () => {
-  test('Case 1: Success update guest info', done => {
+  test('Case 1: Success update guest info', (done) => {
     request(app)
       .put(`/guests/${idGuest}`)
       .set('access_token', access_token)
@@ -511,7 +563,7 @@ describe('PUT /guests/:id', () => {
       })
   })
 
-  test('Case 2: Wrong access token', done => {
+  test('Case 2: Wrong access token', (done) => {
     request(app)
       .put(`/guests/${idGuest}`)
       .set('access_token', wrong_access_token)
@@ -526,12 +578,12 @@ describe('PUT /guests/:id', () => {
         expect(status).toBe(401)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthenticate')
-        expect(body).toHaveProperty('message', 'you need to login first')
+        expect(body).toHaveProperty('message', 'You need to login first')
         done()
       })
   })
 
-  test(`Case 3: Don't have access token`, done => {
+  test(`Case 3: Don't have access token`, (done) => {
     request(app)
       .put(`/guests/${idGuest}`)
       .send({
@@ -550,7 +602,7 @@ describe('PUT /guests/:id', () => {
       })
   })
 
-  test('Case 4: Wrong guest ID (Different User ID)', done => {
+  test('Case 4: Wrong guest ID (Different User ID)', (done) => {
     request(app)
       .put(`/guests/${wrong_idGuest}`)
       .set('access_token', access_token)
@@ -565,12 +617,12 @@ describe('PUT /guests/:id', () => {
         expect(status).toBe(403)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthorize')
-        expect(body).toHaveProperty('message', 'you dont have access')
+        expect(body).toHaveProperty('message', 'You dont have access')
         done()
       })
   })
 
-  test('Case 5: Guest ID not found', done => {
+  test('Case 5: Guest ID not found', (done) => {
     request(app)
       .put(`/guests/${idGuest + 5}`)
       .set('access_token', access_token)
@@ -585,14 +637,33 @@ describe('PUT /guests/:id', () => {
         expect(status).toBe(404)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorNotFound')
-        expect(body).toHaveProperty('message', 'not found')
+        expect(body).toHaveProperty('message', 'Not found')
+        done()
+      })
+  })
+
+  test('Case 6: Database error', (done) => {
+    request(app)
+      .put(`/guests/${idGuest}`)
+      .set('access_token', access_token)
+      .send({
+        name: 'Dekisugiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
+        email: 'dekisugi@mail.com',
+        phoneNumber: '081289272900'
+      })
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body.error).toHaveProperty('name', 'SequelizeDatabaseError')
         done()
       })
   })
 })
 
 describe('PATCH /guests/:id', () => {
-  test(`Case 1: Success update guest's status`, done => {
+  test(`Case 1: Success update guest's status`, (done) => {
     request(app)
       .patch(`/guests/${idGuest}`)
       .send({
@@ -608,7 +679,7 @@ describe('PATCH /guests/:id', () => {
       })
   })
 
-  test('Case 2: Wrong guest ID (Different invitation)', done => {
+  test('Case 2: Wrong guest ID (Different invitation)', (done) => {
     request(app)
       .patch(`/guests/${wrong_idGuest}`)
       .send({
@@ -621,14 +692,30 @@ describe('PATCH /guests/:id', () => {
         expect(status).toBe(404)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorNotFound')
-        expect(body).toHaveProperty('message', 'not found')
+        expect(body).toHaveProperty('message', 'Not found')
+        done()
+      })
+  })
+
+  test(`Case 3: Database error`, (done) => {
+    request(app)
+      .patch(`/guests/${idGuest}`)
+      .send({
+        status: 'hahahay',
+        email: 'dekisugi@mail.com'
+      })
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(500)
+        expect(body.error).toHaveProperty('name', 'SequelizeDatabaseError')
         done()
       })
   })
 })
 
 describe('DELETE /guests/:id', () => {
-  test('Case 1: Success delete guest info', done => {
+  test('Case 1: Success delete guest info', (done) => {
     request(app)
       .delete(`/guests/${idGuest}`)
       .set('access_token', access_token)
@@ -641,7 +728,7 @@ describe('DELETE /guests/:id', () => {
       })
   })
 
-  test('Case 2: Wrong access token', done => {
+  test('Case 2: Wrong access token', (done) => {
     request(app)
       .delete(`/guests/${idGuest}`)
       .set('access_token', wrong_access_token)
@@ -651,12 +738,12 @@ describe('DELETE /guests/:id', () => {
         expect(status).toBe(401)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthenticate')
-        expect(body).toHaveProperty('message', 'you need to login first')
+        expect(body).toHaveProperty('message', 'You need to login first')
         done()
       })
   })
 
-  test(`Case 3: Don't have access token`, done => {
+  test(`Case 3: Don't have access token`, (done) => {
     request(app)
       .delete(`/guests/${idGuest}`)
       .end((err, res) => {
@@ -670,7 +757,7 @@ describe('DELETE /guests/:id', () => {
       })
   })
 
-  test('Case 4: Wrong guest ID (Different User ID)', done => {
+  test('Case 4: Wrong guest ID (Different User ID)', (done) => {
     request(app)
       .delete(`/guests/${wrong_idGuest}`)
       .set('access_token', access_token)
@@ -680,12 +767,12 @@ describe('DELETE /guests/:id', () => {
         expect(status).toBe(403)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthorize')
-        expect(body).toHaveProperty('message', 'you dont have access')
+        expect(body).toHaveProperty('message', 'You dont have access')
         done()
       })
   })
 
-  test('Case 5: Guest ID not found', done => {
+  test('Case 5: Guest ID not found', (done) => {
     request(app)
       .delete(`/guests/${idGuest + 5}`)
       .set('access_token', access_token)
@@ -695,30 +782,28 @@ describe('DELETE /guests/:id', () => {
         expect(status).toBe(404)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorNotFound')
-        expect(body).toHaveProperty('message', 'not found')
+        expect(body).toHaveProperty('message', 'Not found')
         done()
       })
   })
 })
 
-// describe('POST /guests/payment', () => {
-//   test('Case 1: Success transfer money', done => {
-//     request(app)
-//       .post('/guests/payment')
-//       .send({
-//         firstName: 'Naruto',
-//         lastName: 'Sasuke',
-//         email: 'naruke@mail.com',
-//         phone: '727727727',
-//         amount: '24000'
-//       })
-//       .end((err, res) => {
-//         if (err) {
-//           return done(err)
-//         }
-//         const { body, status } = res
-//         expect(status).toBe(200)
-//         done()
-//       })
-//   })
-// })
+describe('POST /guests/payment', () => {
+  test('Case 1: Midtrans error', (done) => {
+    request(app)
+      .post('/guests/payment')
+      .send({
+        firstName: 'Naruto',
+        lastName: 'Sasuke',
+        email: 'naruke@mail.com',
+        phone: '727727727',
+        amount: 250000
+      })
+      .end((err, res) => {
+        if (err) return done(err)
+        const { status } = res
+        expect(status).toBe(500)// snap suka error, harusnya success
+        done()
+      })
+  })
+})

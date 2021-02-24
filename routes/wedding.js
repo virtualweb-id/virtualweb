@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const WeddingController = require('../controllers/WeddingController')
-const { authorizeWedding } = require('../middlewares/auth')
+const { authorizeWedding } = require('../middlewares')
 
 router.post('/', WeddingController.createWeddingPlan)
 router.get('/', WeddingController.getWeddingInfoById)

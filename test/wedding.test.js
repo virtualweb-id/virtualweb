@@ -53,7 +53,8 @@ let wrong_access_token
 let idWeds
 let wrong_idWeds
 
-beforeAll(done => {
+beforeAll((done) => {
+  jest.setTimeout(30000)
   queryInterface.bulkInsert('Users', [userTest], { returning: true })
     .then(user => {
       const { id, email } = user[0]
@@ -77,7 +78,7 @@ beforeAll(done => {
     .catch(err => done(err))
 })
 
-afterAll(done => {
+afterAll((done) => {
   queryInterface.bulkDelete('Users')
     .then(() => { return queryInterface.bulkDelete('Weddings') })
     .then(() => done())
@@ -85,7 +86,7 @@ afterAll(done => {
 })
 
 describe('POST /weddings', () => {
-  test('Case 1: Create wedding plan', done => {
+  test('Case 1: Create wedding plan', (done) => {
     request(app)
       .post('/weddings')
       .set('access_token', access_token)
@@ -108,7 +109,7 @@ describe('POST /weddings', () => {
       })
   })
 
-  test('Case 2: Wrong access token', done => {
+  test('Case 2: Wrong access token', (done) => {
     request(app)
       .post('/weddings')
       .set('access_token', wrong_access_token)
@@ -128,12 +129,12 @@ describe('POST /weddings', () => {
         expect(status).toBe(401)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthenticate')
-        expect(body).toHaveProperty('message', 'you need to login first')
+        expect(body).toHaveProperty('message', 'You need to login first')
         done()
       })
   })
 
-  test(`Case 3: Don't have access token, so can't have User ID`, done => {
+  test(`Case 3: Don't have access token, so can't have User ID`, (done) => {
     request(app)
       .post('/weddings')
       .send({
@@ -157,7 +158,7 @@ describe('POST /weddings', () => {
       })
   })
 
-  test('Case 4: Bad request; blank title', done => {
+  test('Case 4: Bad request; blank title', (done) => {
     request(app)
       .post('/weddings')
       .set('access_token', access_token)
@@ -182,7 +183,7 @@ describe('POST /weddings', () => {
       })
   })
 
-  test('Case 5: Bad request; blank date', done => {
+  test('Case 5: Bad request; blank date', (done) => {
     request(app)
       .post('/weddings')
       .set('access_token', access_token)
@@ -205,7 +206,7 @@ describe('POST /weddings', () => {
       })
   })
 
-  test('Case 6: Bad request; date must be greater than today', done => {
+  test('Case 6: Bad request; date must be greater than today', (done) => {
     request(app)
       .post('/weddings')
       .set('access_token', access_token)
@@ -230,7 +231,7 @@ describe('POST /weddings', () => {
       })
   })
 
-  test('Case 7: Bad request; blank address', done => {
+  test('Case 7: Bad request; blank address', (done) => {
     request(app)
       .post('/weddings')
       .set('access_token', access_token)
@@ -255,7 +256,7 @@ describe('POST /weddings', () => {
       })
   })
 
-  test('Case 8: Bad request; blank groom name', done => {
+  test('Case 8: Bad request; blank groom name', (done) => {
     request(app)
       .post('/weddings')
       .set('access_token', access_token)
@@ -280,7 +281,7 @@ describe('POST /weddings', () => {
       })
   })
 
-  test('Case 9: Bad request; blank bride name', done => {
+  test('Case 9: Bad request; blank bride name', (done) => {
     request(app)
       .post('/weddings')
       .set('access_token', access_token)
@@ -305,7 +306,7 @@ describe('POST /weddings', () => {
       })
   })
 
-  test(`Case 10: Bad request; blank groom's photo`, done => {
+  test(`Case 10: Bad request; blank groom's photo`, (done) => {
     request(app)
       .post('/weddings')
       .set('access_token', access_token)
@@ -330,7 +331,7 @@ describe('POST /weddings', () => {
       })
   })
 
-  test(`Case 11: Bad request; blank bride's photo`, done => {
+  test(`Case 11: Bad request; blank bride's photo`, (done) => {
     request(app)
       .post('/weddings')
       .set('access_token', access_token)
@@ -355,7 +356,7 @@ describe('POST /weddings', () => {
       })
   })
 
-  test(`Case 12: Bad request; all field's are blank`, done => {
+  test(`Case 12: Bad request; all field's are blank`, (done) => {
     request(app)
       .post('/weddings')
       .set('access_token', access_token)
@@ -390,7 +391,7 @@ describe('POST /weddings', () => {
 })
 
 describe('GET /weddings', () => {
-  test(`Case 1: Success get wedding's info`, done => {
+  test(`Case 1: Success get wedding's info`, (done) => {
     request(app)
       .get('/weddings')
       .set('access_token', access_token)
@@ -403,7 +404,7 @@ describe('GET /weddings', () => {
       })
   })
 
-  test(`Case 2: Wrong access token`, done => {
+  test(`Case 2: Wrong access token`, (done) => {
     request(app)
       .get('/weddings')
       .set('access_token', wrong_access_token)
@@ -413,12 +414,12 @@ describe('GET /weddings', () => {
         expect(status).toBe(401)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthenticate')
-        expect(body).toHaveProperty('message', 'you need to login first')
+        expect(body).toHaveProperty('message', 'You need to login first')
         done()
       })
   })
 
-  test(`Case 3: Don't have access token`, done => {
+  test(`Case 3: Don't have access token`, (done) => {
     request(app)
       .get('/weddings')
       .end((err, res) => {
@@ -434,7 +435,7 @@ describe('GET /weddings', () => {
 })
 
 describe('PUT /weddings/:id', () => {
-  test('Case 1: Success update wedding info (date)', done => {
+  test('Case 1: Success update wedding info (date)', (done) => {
     request(app)
       .put(`/weddings/${idWeds}`)
       .set('access_token', access_token)
@@ -457,7 +458,7 @@ describe('PUT /weddings/:id', () => {
       })
   })
 
-  test('Case 2: Wrong access token', done => {
+  test('Case 2: Wrong access token', (done) => {
     request(app)
       .put(`/weddings/${idWeds}`)
       .set('access_token', wrong_access_token)
@@ -477,12 +478,12 @@ describe('PUT /weddings/:id', () => {
         expect(status).toBe(401)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthenticate')
-        expect(body).toHaveProperty('message', 'you need to login first')
+        expect(body).toHaveProperty('message', 'You need to login first')
         done()
       })
   })
 
-  test(`Case 3: Don't have access token`, done => {
+  test(`Case 3: Don't have access token`, (done) => {
     request(app)
       .put(`/weddings/${idWeds}`)
       .send({
@@ -506,7 +507,7 @@ describe('PUT /weddings/:id', () => {
       })
   })
 
-  test('Case 4: Wrong wedding ID (Different User ID)', done => {
+  test('Case 4: Wrong wedding ID (Different User ID)', (done) => {
     request(app)
       .put(`/weddings/${wrong_idWeds}`)
       .set('access_token', access_token)
@@ -526,12 +527,12 @@ describe('PUT /weddings/:id', () => {
         expect(status).toBe(403)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthorize')
-        expect(body).toHaveProperty('message', 'you dont have access')
+        expect(body).toHaveProperty('message', 'You dont have access')
         done()
       })
   })
 
-  test(`Case 5: Wedding ID not found`, done => {
+  test(`Case 5: Wedding ID not found`, (done) => {
     request(app)
       .put(`/weddings/${idWeds + 5}`)
       .set('access_token', access_token)
@@ -551,14 +552,38 @@ describe('PUT /weddings/:id', () => {
         expect(status).toBe(404)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorNotFound')
-        expect(body).toHaveProperty('message', 'not found')
+        expect(body).toHaveProperty('message', 'Not found')
+        done()
+      })
+  })
+
+  test('Case 6: Database error', (done) => {
+    request(app)
+      .put(`/weddings/${idWeds}`)
+      .set('access_token', access_token)
+      .send({
+        title: 'Nobita & Shizukaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        date: '2021-02-28',
+        address: 'Kyoto',
+        groomName: 'Nobita',
+        brideName: 'Shizuka',
+        groomImg: dummy,
+        brideImg: dummy,
+        status: false
+      })
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body.error).toHaveProperty('name', 'SequelizeDatabaseError')
         done()
       })
   })
 })
 
 describe('DELETE /weddings/:id', () => {
-  test('Case 1: Success delete wedding info', done => {
+  test('Case 1: Success delete wedding info', (done) => {
     request(app)
       .delete(`/weddings/${idWeds}`)
       .set('access_token', access_token)
@@ -571,7 +596,7 @@ describe('DELETE /weddings/:id', () => {
       })
   })
 
-  test('Case 2: Wrong access token', done => {
+  test('Case 2: Wrong access token', (done) => {
     request(app)
       .delete(`/weddings/${idWeds}`)
       .set('access_token', wrong_access_token)
@@ -581,12 +606,12 @@ describe('DELETE /weddings/:id', () => {
         expect(status).toBe(401)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthenticate')
-        expect(body).toHaveProperty('message', 'you need to login first')
+        expect(body).toHaveProperty('message', 'You need to login first')
         done()
       })
   })
 
-  test(`Case 3: Don't have access token`, done => {
+  test(`Case 3: Don't have access token`, (done) => {
     request(app)
       .delete(`/weddings/${idWeds}`)
       .end((err, res) => {
@@ -600,7 +625,7 @@ describe('DELETE /weddings/:id', () => {
       })
   })
 
-  test('Case 4: Wrong wedding ID (Different User ID)', done => {
+  test('Case 4: Wrong wedding ID (Different User ID)', (done) => {
     request(app)
       .delete(`/weddings/${wrong_idWeds}`)
       .set('access_token', access_token)
@@ -610,12 +635,12 @@ describe('DELETE /weddings/:id', () => {
         expect(status).toBe(403)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorAuthorize')
-        expect(body).toHaveProperty('message', 'you dont have access')
+        expect(body).toHaveProperty('message', 'You dont have access')
         done()
       })
   })
 
-  test('Case 5: Wedding ID not found', done => {
+  test('Case 5: Wedding ID not found', (done) => {
     request(app)
       .delete(`/weddings/${idWeds + 5}`)
       .set('access_token', access_token)
@@ -625,7 +650,7 @@ describe('DELETE /weddings/:id', () => {
         expect(status).toBe(404)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'ErrorNotFound')
-        expect(body).toHaveProperty('message', 'not found')
+        expect(body).toHaveProperty('message', 'Not found')
         done()
       })
   })

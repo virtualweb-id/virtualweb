@@ -14,20 +14,21 @@ const userTest = {
   updatedAt: new Date()
 }
 
-beforeAll(done => {
+beforeAll((done) => {
+  jest.setTimeout(30000)
   queryInterface.bulkInsert('Users', [ userTest ])
     .then(() => done())
     .catch(err => done(err))
 })
 
-afterAll(done => {
+afterAll((done) => {
   queryInterface.bulkDelete('Users')
     .then(() => done())
     .catch(err => done(err))
 })
 
 describe('POST /register', () => {
-  test('Case 1: Success sign up', done => {
+  test('Case 1: Success sign up', (done) => {
     request(app)
       .post('/register')
       .send({ name: 'Shizuka', email: 'shizukamu@mail.com', password: hashPwd('nobitaku'), phoneNumber: '27222222' })
@@ -43,7 +44,7 @@ describe('POST /register', () => {
       })
   })
 
-  test('Case 2: Email has been registered', done => {
+  test('Case 2: Email has been registered', (done) => {
     request(app)
       .post('/register')
       .send({ name: 'Shizuka', email: 'shizukamu@mail.com', password: hashPwd('nobitaku'), phoneNumber: '27222222' })
@@ -58,7 +59,7 @@ describe('POST /register', () => {
       })
   })
 
-  test('Case 3: Blank name', done => {
+  test('Case 3: Blank name', (done) => {
     request(app)
       .post('/register')
       .send({ name: '', email: 'shizukamu@mail.com', password: hashPwd('nobitaku'), phoneNumber: '27222222' })
@@ -73,7 +74,7 @@ describe('POST /register', () => {
       })
   })
 
-  test('Case 4: Blank email', done => {
+  test('Case 4: Blank email', (done) => {
     request(app)
       .post('/register')
       .send({ name: 'Shizuka', email: '', password: hashPwd('nobitaku'), phoneNumber: '27222222' })
@@ -91,7 +92,7 @@ describe('POST /register', () => {
       })
   })
 
-  test('Case 5: Blank password', done => {
+  test('Case 5: Blank password', (done) => {
     request(app)
       .post('/register')
       .send({ name: 'Shizuka', email: 'shizukamu@mail.com', password: '', phoneNumber: '27222222' })
@@ -109,7 +110,7 @@ describe('POST /register', () => {
       })
   })
 
-  test('Case 6: Blank phone number', done => {
+  test('Case 6: Blank phone number', (done) => {
     request(app)
       .post('/register')
       .send({ name: 'Shizuka', email: 'shizukamu@mail.com', password: hashPwd('nobitaku'), phoneNumber: '' })
@@ -124,7 +125,7 @@ describe('POST /register', () => {
       })
   })
 
-  test('Case 7: Blank name, email, password, & phone number', done => {
+  test('Case 7: Blank name, email, password, & phone number', (done) => {
     request(app)
       .post('/register')
       .end((err, res) => {
@@ -145,7 +146,7 @@ describe('POST /register', () => {
 })
 
 describe('POST /login', () => {
-  test('Case 1: Success sign in', done => {
+  test('Case 1: Success sign in', (done) => {
     request(app)
       .post('/login')
       .send({ email: userTest.email, password: passTest })
@@ -158,7 +159,7 @@ describe('POST /login', () => {
       })
   })
 
-  test('Case 2: Invalid email', done => {
+  test('Case 2: Invalid email', (done) => {
     request(app)
       .post('/login')
       .send({ email: userTest.email, password: 'hahaha' })
@@ -168,12 +169,12 @@ describe('POST /login', () => {
         expect(status).toBe(401)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'InvalidPassOrEmail')
-        expect(body).toHaveProperty('message', 'wrong email / password')
+        expect(body).toHaveProperty('message', 'Wrong email / password')
         done()
       })
   })
 
-  test('Case 3: Invalid password', done => {
+  test('Case 3: Invalid password', (done) => {
     request(app)
       .post('/login')
       .send({ email: 'hahaha@mail.com', password: passTest })
@@ -183,12 +184,12 @@ describe('POST /login', () => {
         expect(status).toBe(401)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'InvalidPassOrEmail')
-        expect(body).toHaveProperty('message', 'wrong email / password')
+        expect(body).toHaveProperty('message', 'Wrong email / password')
         done()
       })
   })
 
-  test('Case 4: Blank email', done => {
+  test('Case 4: Blank email', (done) => {
     request(app)
       .post('/login')
       .send({ email: '', password: passTest })
@@ -198,12 +199,12 @@ describe('POST /login', () => {
         expect(status).toBe(401)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'InvalidPassOrEmail')
-        expect(body).toHaveProperty('message', 'wrong email / password')
+        expect(body).toHaveProperty('message', 'Wrong email / password')
         done()
       })
   })
 
-  test('Case 5: Blank password', done => {
+  test('Case 5: Blank password', (done) => {
     request(app)
       .post('/login')
       .send({ email: userTest.email, password: '' })
@@ -213,12 +214,12 @@ describe('POST /login', () => {
         expect(status).toBe(401)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'InvalidPassOrEmail')
-        expect(body).toHaveProperty('message', 'wrong email / password')
+        expect(body).toHaveProperty('message', 'Wrong email / password')
         done()
       })
   })
 
-  test('Case 6: Blank email & password', done => {
+  test('Case 6: Blank email & password', (done) => {
     request(app)
       .post('/login')
       .end((err, res) => {
@@ -227,7 +228,7 @@ describe('POST /login', () => {
         expect(status).toBe(401)
         expect(body).toHaveProperty('status', 'Error')
         expect(body).toHaveProperty('name', 'InvalidPassOrEmail')
-        expect(body).toHaveProperty('message', 'wrong email / password')
+        expect(body).toHaveProperty('message', 'Wrong email / password')
         done()
       })
   })
