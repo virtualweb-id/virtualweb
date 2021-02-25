@@ -85,7 +85,7 @@ beforeAll((done) => {
       invitationTest.WeddingId = id
       invitationTest.brigeNickname = brideName
       invitationTest.groomNickname = groomName
-      return queryInterface.bulkInsert('Invitations', [ invitationTest ])
+      return queryInterface.bulkInsert('Invitations', [invitationTest])
     })
     .then(() => {
       return queryInterface.bulkInsert('Guests', [addGuestTest], { returning: true })
@@ -132,7 +132,7 @@ describe('POST /guest', () => {
       })
   })
 
-    test('Case 2: Wrong access token', (done) => {
+  test('Case 2: Wrong access token', (done) => {
     request(app)
       .post('/guests')
       .set('access_token', wrong_access_token)
@@ -292,7 +292,7 @@ describe('POST /guests/upload', () => {
         expect(status).toBe(201)
         expect(body).toHaveProperty('message', 'Success uploaded')
         done()
-      })      
+      })
   })
 
   test('Case 2: Some data was uploaded', (done) => {
@@ -306,7 +306,7 @@ describe('POST /guests/upload', () => {
         expect(status).toBe(201)
         expect(body).toHaveProperty('message', `Uploaded. But some were not uploaded because guest's email have been registered`)
         done()
-      })      
+      })
   })
 
   test('Case 3: File was empty', (done) => {
@@ -322,7 +322,7 @@ describe('POST /guests/upload', () => {
         expect(body).toHaveProperty('name', 'EmptyFile')
         expect(body).toHaveProperty('message', 'All emails have been registered')
         done()
-      })      
+      })
   })
 
   test('Case 4: Wrong access token', (done) => {
@@ -338,7 +338,7 @@ describe('POST /guests/upload', () => {
         expect(body).toHaveProperty('name', 'ErrorAuthenticate')
         expect(body).toHaveProperty('message', 'You need to login first')
         done()
-      })      
+      })
   })
 
   test('Case 5: Wrong file format', (done) => {
@@ -351,7 +351,7 @@ describe('POST /guests/upload', () => {
         const { body, status } = res
         expect(status).toBe(500)
         done()
-      })      
+      })
   })
 
   test('Case 6: Bad request; send a body not a file', (done) => {
@@ -365,7 +365,7 @@ describe('POST /guests/upload', () => {
         expect(status).toBe(500)
         expect(body).toHaveProperty('status', 'Error')
         done()
-      })      
+      })
   })
 })
 
@@ -642,7 +642,31 @@ describe('PUT /guests/:id', () => {
       })
   })
 
-  test('Case 6: Database error', (done) => {
+  test('Case 6: Blank fill', (done) => {
+    request(app)
+      .put(`/guests/${idGuest}`)
+      .set('access_token', access_token)
+      .send({
+        name: '',
+        email: '',
+        phoneNumber: ''
+      })
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'SequelizeValidationError')
+        expect(body).toHaveProperty('message', [
+          'Name is required',
+          'Email is required',
+          'Phone number is required'
+        ])
+        done()
+      })
+  })
+
+  test('Case 7: Database error', (done) => {
     request(app)
       .put(`/guests/${idGuest}`)
       .set('access_token', access_token)
@@ -801,7 +825,7 @@ describe('POST /guests/payment', () => {
       })
       .end((err, res) => {
         if (err) return done(err)
-        const { status } = res
+        const { body, status } = res
         expect(status).toBe(500)// snap suka error, harusnya success
         done()
       })

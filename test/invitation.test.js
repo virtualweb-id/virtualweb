@@ -354,4 +354,31 @@ describe('PUT /invitations/:id', () => {
         done()
       })
   })
+
+  test(`Case 6: Bad request; all field's are blank`, (done) => {
+    request(app)
+      .put(`/invitations/${idInvt}`)
+      .set('access_token', access_token)
+      .send({
+        brigeNickname: '',
+        groomNickname: '',
+        story: '',
+        title: '',
+        backgroundImg: '',
+        additionalImg: '',
+        videoUrl: '',
+        backgroundColor: '',
+        textColor: '',
+        timeEvent1: '',
+        timeEvent2: '',
+        youtubeUrl: ''
+      })
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(200)
+        expect(body).toHaveProperty('backgroundImg')
+        done()
+      })
+  })
 })
