@@ -38,7 +38,7 @@ const sendToUser = (name, email) => {
 }
 
 const sendToGuest = ( guest, guestEmail, bride, groom, date, guestId ) => {
-  const baseUrl = 'http://localhost:3000'
+  const baseUrl = 'https://undanganku-id.web.app'
   const formatDate = moment(date).format("dddd, MMMM Do, YYYY")
   const output = guestConfirm( guest, bride, groom, formatDate, baseUrl, guestId )
   
@@ -67,7 +67,7 @@ const sendToGuest = ( guest, guestEmail, bride, groom, date, guestId ) => {
 }
 
 const sendEventLink = ( brideName, groomName, guestEmail, invitationId ) => {
-  const baseUrl = 'http://localhost:3000'
+  const baseUrl = 'https://undanganku-id.web.app'
   const output = eventLink(brideName, groomName, baseUrl, invitationId)
   
   let transporter = nodemailer.createTransport({
