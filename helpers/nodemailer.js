@@ -67,7 +67,7 @@ const sendToGuest = ( guest, guestEmail, bride, groom, date, guestId ) => {
 }
 
 const sendEventLink = ( brideName, groomName, guestEmail, invitationId ) => {
-  const baseUrl = 'https://undanganku-id.web.app/'
+  const baseUrl = 'https://undanganku-id.web.app'
   const output = eventLink(brideName, groomName, baseUrl, invitationId)
   
   let transporter = nodemailer.createTransport({
