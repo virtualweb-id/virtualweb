@@ -1,6 +1,6 @@
 const router = require('express').Router()
-const Invitation = require('../controllers/InvitationController')
+const { InvitationController } = require('../controllers')
 
-router.use('/:id', Invitation.showById)
+router.use('/:id', InvitationController.displayForGuest)
 
 module.exports = router

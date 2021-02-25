@@ -115,6 +115,25 @@ describe('POST /comments', () => {
         done()
       })
   })
+
+  test(`Case 3: Bad request; all field's are blank`, (done) => {
+    request(app)
+      .post('/comments')
+      .send({
+        name: '',
+        relationship: '',
+        message: '',
+        InvitationId: commentTest.InvitationId
+      })
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'SequelizeValidationError')
+        done()
+      })
+  })
 })
 
 describe('GET /comments/:id', () => {

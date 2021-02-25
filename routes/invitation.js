@@ -1,10 +1,9 @@
-const InvitationController = require('../controllers/InvitationController')
+const router = require('express').Router()
+const { InvitationController } = require('../controllers')
 const { authorizeInvitation } = require('../middlewares')
 
-const router = require('express').Router()
-
-router.get('/', InvitationController.showOne)
-router.put('/:id', authorizeInvitation, InvitationController.edit)
+router.get('/', InvitationController.displayForUser)
+router.put('/:id', authorizeInvitation, InvitationController.updateInvitation)
 
 
 module.exports = router

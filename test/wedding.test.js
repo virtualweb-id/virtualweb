@@ -580,6 +580,30 @@ describe('PUT /weddings/:id', () => {
         done()
       })
   })
+
+  test(`Case 7: Bad request; all field's are blank`, (done) => {
+    request(app)
+      .put(`/weddings/${idWeds}`)
+      .set('access_token', access_token)
+      .send({
+        title: '',
+        date: '',
+        address: '',
+        groomName: '',
+        brideName: '',
+        groomImg: '',
+        brideImg: '',
+        status: false
+      })
+      .end((err, res) => {
+        if (err) return done(err)
+        const { body, status } = res
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('status', 'Error')
+        expect(body).toHaveProperty('name', 'SequelizeValidationError')
+        done()
+      })
+  })
 })
 
 describe('DELETE /weddings/:id', () => {

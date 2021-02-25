@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1614181975756" clover="3.2.0">
-  <project timestamp="1614181975756" name="All files">
-    <metrics statements="462" coveredstatements="447" conditionals="167" coveredconditionals="130" methods="57" coveredmethods="57" elements="686" coveredelements="634" complexity="0" loc="462" ncloc="462" packages="8" files="33" classes="33"/>
+<coverage generated="1614240927032" clover="3.2.0">
+  <project timestamp="1614240927033" name="All files">
+    <metrics statements="495" coveredstatements="480" conditionals="165" coveredconditionals="158" methods="57" coveredmethods="57" elements="717" coveredelements="695" complexity="0" loc="495" ncloc="495" packages="13" files="54" classes="54"/>
     <package name="virtualweb-server">
       <metrics statements="12" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="app.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/app.js">
@@ -36,202 +36,313 @@
       </file>
     </package>
     <package name="virtualweb-server.controllers">
-      <metrics statements="181" coveredstatements="170" conditionals="120" coveredconditionals="88" methods="22" coveredmethods="22"/>
-      <file name="CommentController.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/CommentController.js">
-        <metrics statements="18" coveredstatements="17" conditionals="8" coveredconditionals="4" methods="2" coveredmethods="2"/>
+      <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="index.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/index.js">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="5" type="stmt"/>
-        <line num="2" count="5" type="stmt"/>
+      </file>
+    </package>
+    <package name="virtualweb-server.controllers.Comment">
+      <metrics statements="15" coveredstatements="14" conditionals="6" coveredconditionals="6" methods="2" coveredmethods="2"/>
+      <file name="addComment.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Comment/addComment.js">
+        <metrics statements="7" coveredstatements="7" conditionals="6" coveredconditionals="6" methods="1" coveredmethods="1"/>
+        <line num="1" count="5" type="stmt"/>
         <line num="3" count="5" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
-        <line num="8" count="1" type="stmt"/>
-        <line num="9" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="11" count="1" type="stmt"/>
+        <line num="4" count="3" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="6" count="3" type="stmt"/>
         <line num="12" count="1" type="stmt"/>
-        <line num="16" count="1" type="stmt"/>
-        <line num="17" count="1" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="25" count="2" type="stmt"/>
-        <line num="26" count="2" type="stmt"/>
-        <line num="27" count="2" type="stmt"/>
-        <line num="33" count="1" type="stmt"/>
-        <line num="34" count="1" type="stmt"/>
-        <line num="36" count="1" type="stmt"/>
-        <line num="41" count="5" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
       </file>
-      <file name="GuestController.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/GuestController.js">
-        <metrics statements="78" coveredstatements="73" conditionals="22" coveredconditionals="19" methods="11" coveredmethods="11"/>
+      <file name="findAllComment.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Comment/findAllComment.js">
+        <metrics statements="7" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="5" type="stmt"/>
-        <line num="2" count="5" type="stmt"/>
         <line num="3" count="5" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
-        <line num="8" count="1" type="stmt"/>
-        <line num="9" count="1" type="stmt"/>
-        <line num="13" count="1" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="20" count="1" type="stmt"/>
-        <line num="21" count="1" type="stmt"/>
-        <line num="22" count="1" type="stmt"/>
-        <line num="23" count="1" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="30" count="1" type="stmt"/>
-        <line num="31" count="1" type="stmt"/>
-        <line num="32" count="1" type="stmt"/>
-        <line num="36" count="1" type="stmt"/>
-        <line num="37" count="1" type="stmt"/>
-        <line num="38" count="6" type="stmt"/>
-        <line num="40" count="1" type="stmt"/>
-        <line num="41" count="6" type="stmt"/>
-        <line num="49" count="6" type="stmt"/>
-        <line num="51" count="1" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="58" count="6" type="stmt"/>
-        <line num="59" count="6" type="stmt"/>
-        <line num="60" count="6" type="stmt"/>
-        <line num="61" count="6" type="stmt"/>
-        <line num="69" count="1" type="stmt"/>
-        <line num="71" count="5" type="stmt"/>
-        <line num="76" count="2" type="stmt"/>
-        <line num="77" count="2" type="stmt"/>
-        <line num="78" count="2" type="stmt"/>
-        <line num="79" count="2" type="stmt"/>
-        <line num="87" count="1" type="stmt"/>
-        <line num="89" count="1" type="stmt"/>
-        <line num="94" count="3" type="stmt"/>
-        <line num="95" count="3" type="stmt"/>
-        <line num="96" count="3" type="stmt"/>
-        <line num="97" count="3" type="stmt"/>
-        <line num="98" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="99" count="1" type="stmt"/>
-        <line num="101" count="2" type="stmt"/>
-        <line num="102" count="2" type="stmt"/>
-        <line num="103" count="2" type="stmt"/>
-        <line num="104" count="2" type="stmt"/>
-        <line num="105" count="2" type="stmt"/>
-        <line num="111" count="1" type="stmt"/>
-        <line num="114" count="1" type="stmt"/>
-        <line num="119" count="1" type="stmt"/>
-        <line num="120" count="1" type="stmt"/>
-        <line num="121" count="1" type="stmt"/>
-        <line num="122" count="1" type="stmt"/>
-        <line num="124" count="0" type="stmt"/>
-        <line num="129" count="4" type="stmt"/>
-        <line num="130" count="4" type="stmt"/>
-        <line num="131" count="4" type="stmt"/>
-        <line num="132" count="3" type="stmt"/>
-        <line num="133" count="3" type="stmt"/>
-        <line num="134" count="3" type="stmt"/>
-        <line num="135" count="3" type="stmt"/>
-        <line num="136" count="7" type="stmt"/>
-        <line num="143" count="7" type="stmt"/>
-        <line num="144" count="7" type="cond" truecount="2" falsecount="0"/>
-        <line num="147" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="148" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="149" count="1" type="stmt"/>
-        <line num="150" count="1" type="stmt"/>
-        <line num="152" count="1" type="stmt"/>
-        <line num="153" count="1" type="stmt"/>
-        <line num="156" count="1" type="stmt"/>
-        <line num="161" count="1" type="stmt"/>
-        <line num="162" count="1" type="stmt"/>
-        <line num="163" count="1" type="stmt"/>
-        <line num="178" count="1" type="stmt"/>
-        <line num="179" count="0" type="stmt"/>
-        <line num="181" count="1" type="stmt"/>
-        <line num="186" count="5" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
       </file>
-      <file name="InvitationController.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/InvitationController.js">
-        <metrics statements="27" coveredstatements="25" conditionals="30" coveredconditionals="16" methods="3" coveredmethods="3"/>
+      <file name="index.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Comment/index.js">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="5" type="stmt"/>
-        <line num="2" count="5" type="stmt"/>
-        <line num="6" count="2" type="stmt"/>
-        <line num="7" count="2" type="stmt"/>
-        <line num="8" count="2" type="stmt"/>
-        <line num="9" count="2" type="stmt"/>
-        <line num="10" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="11" count="1" type="stmt"/>
-        <line num="13" count="1" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="21" count="1" type="stmt"/>
-        <line num="22" count="1" type="stmt"/>
-        <line num="23" count="1" type="stmt"/>
-        <line num="24" count="1" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="31" count="2" type="stmt"/>
-        <line num="32" count="2" type="stmt"/>
-        <line num="38" count="2" type="stmt"/>
-        <line num="41" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="42" count="2" type="stmt"/>
-        <line num="45" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="46" count="2" type="stmt"/>
-        <line num="49" count="2" type="stmt"/>
-        <line num="63" count="2" type="stmt"/>
-        <line num="66" count="1" type="stmt"/>
-        <line num="68" count="1" type="stmt"/>
-        <line num="73" count="5" type="stmt"/>
       </file>
-      <file name="UserController.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/UserController.js">
-        <metrics statements="22" coveredstatements="21" conditionals="16" coveredconditionals="16" methods="2" coveredmethods="2"/>
+    </package>
+    <package name="virtualweb-server.controllers.Guest">
+      <metrics statements="96" coveredstatements="91" conditionals="22" coveredconditionals="22" methods="11" coveredmethods="11"/>
+      <file name="addGuest.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Guest/addGuest.js">
+        <metrics statements="8" coveredstatements="8" conditionals="8" coveredconditionals="8" methods="1" coveredmethods="1"/>
         <line num="1" count="5" type="stmt"/>
-        <line num="2" count="5" type="stmt"/>
-        <line num="6" count="7" type="stmt"/>
-        <line num="7" count="7" type="stmt"/>
-        <line num="8" count="7" type="stmt"/>
-        <line num="14" count="1" type="stmt"/>
+        <line num="3" count="5" type="stmt"/>
+        <line num="4" count="6" type="stmt"/>
+        <line num="5" count="6" type="stmt"/>
+        <line num="6" count="6" type="stmt"/>
+        <line num="7" count="6" type="stmt"/>
         <line num="15" count="1" type="stmt"/>
-        <line num="22" count="6" type="stmt"/>
-        <line num="27" count="6" type="stmt"/>
-        <line num="28" count="6" type="stmt"/>
-        <line num="29" count="6" type="cond" truecount="4" falsecount="0"/>
-        <line num="31" count="3" type="stmt"/>
-        <line num="32" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="33" count="1" type="stmt"/>
-        <line num="35" count="2" type="stmt"/>
-        <line num="36" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="37" count="1" type="stmt"/>
-        <line num="39" count="1" type="stmt"/>
-        <line num="40" count="1" type="stmt"/>
-        <line num="41" count="1" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="55" count="5" type="stmt"/>
+        <line num="17" count="5" type="stmt"/>
       </file>
-      <file name="WeddingController.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/WeddingController.js">
-        <metrics statements="36" coveredstatements="34" conditionals="44" coveredconditionals="33" methods="4" coveredmethods="4"/>
+      <file name="changeStatus.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Guest/changeStatus.js">
+        <metrics statements="16" coveredstatements="16" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
+        <line num="4" count="5" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="6" count="3" type="stmt"/>
+        <line num="7" count="3" type="stmt"/>
+        <line num="8" count="3" type="stmt"/>
+        <line num="9" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
+        <line num="15" count="2" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+      </file>
+      <file name="deleteGuest.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Guest/deleteGuest.js">
+        <metrics statements="7" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="3" count="5" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
-        <line num="8" count="1" type="stmt"/>
-        <line num="12" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="9" count="0" type="stmt"/>
+      </file>
+      <file name="findAllGuests.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Guest/findAllGuests.js">
+        <metrics statements="7" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="3" count="5" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+      </file>
+      <file name="findGuestById.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Guest/findGuestById.js">
+        <metrics statements="7" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="3" count="5" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+      </file>
+      <file name="guestPayment.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Guest/guestPayment.js">
+        <metrics statements="8" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="3" count="5" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+      </file>
+      <file name="index.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Guest/index.js">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="5" type="stmt"/>
+      </file>
+      <file name="sendEmail.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Guest/sendEmail.js">
+        <metrics statements="14" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="2" count="5" type="stmt"/>
+        <line num="4" count="5" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="6" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="6" type="stmt"/>
+        <line num="24" count="6" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+      </file>
+      <file name="updateGuest.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Guest/updateGuest.js">
+        <metrics statements="8" coveredstatements="8" conditionals="6" coveredconditionals="6" methods="1" coveredmethods="1"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="3" count="5" type="stmt"/>
+        <line num="4" count="3" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="6" count="3" type="stmt"/>
+        <line num="7" count="3" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
+      </file>
+      <file name="uploadGuest.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Guest/uploadGuest.js">
+        <metrics statements="20" coveredstatements="20" conditionals="6" coveredconditionals="6" methods="1" coveredmethods="1"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="2" count="5" type="stmt"/>
+        <line num="4" count="5" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
+        <line num="6" count="4" type="stmt"/>
+        <line num="7" count="4" type="stmt"/>
+        <line num="8" count="3" type="stmt"/>
+        <line num="9" count="3" type="stmt"/>
+        <line num="10" count="3" type="stmt"/>
+        <line num="11" count="3" type="stmt"/>
+        <line num="12" count="7" type="stmt"/>
+        <line num="19" count="7" type="stmt"/>
+        <line num="20" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="23" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="24" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="virtualweb-server.controllers.Invitation">
+      <metrics statements="32" coveredstatements="30" conditionals="30" coveredconditionals="30" methods="3" coveredmethods="3"/>
+      <file name="displayForGuest.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Invitation/displayForGuest.js">
+        <metrics statements="7" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="3" count="5" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+      </file>
+      <file name="displayForUser.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Invitation/displayForUser.js">
+        <metrics statements="10" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="3" count="5" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="8" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
-        <line num="19" count="10" type="stmt"/>
-        <line num="20" count="10" type="stmt"/>
-        <line num="21" count="10" type="stmt"/>
-        <line num="24" count="10" type="cond" truecount="2" falsecount="0"/>
-        <line num="25" count="8" type="stmt"/>
-        <line num="28" count="10" type="cond" truecount="2" falsecount="0"/>
-        <line num="29" count="8" type="stmt"/>
-        <line num="32" count="10" type="stmt"/>
-        <line num="44" count="10" type="stmt"/>
-        <line num="45" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="59" count="1" type="stmt"/>
-        <line num="61" count="9" type="stmt"/>
-        <line num="66" count="2" type="stmt"/>
-        <line num="67" count="2" type="stmt"/>
-        <line num="68" count="2" type="stmt"/>
-        <line num="71" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="72" count="2" type="stmt"/>
-        <line num="75" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="76" count="2" type="stmt"/>
-        <line num="79" count="2" type="stmt"/>
-        <line num="89" count="2" type="stmt"/>
-        <line num="92" count="1" type="stmt"/>
-        <line num="94" count="1" type="stmt"/>
-        <line num="99" count="1" type="stmt"/>
-        <line num="100" count="1" type="stmt"/>
-        <line num="101" count="1" type="stmt"/>
-        <line num="102" count="1" type="stmt"/>
-        <line num="104" count="0" type="stmt"/>
-        <line num="109" count="5" type="stmt"/>
+      </file>
+      <file name="index.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Invitation/index.js">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="5" type="stmt"/>
+      </file>
+      <file name="updateInvitation.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Invitation/updateInvitation.js">
+        <metrics statements="14" coveredstatements="14" conditionals="28" coveredconditionals="28" methods="1" coveredmethods="1"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="2" count="5" type="stmt"/>
+        <line num="4" count="5" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="6" count="3" type="stmt"/>
+        <line num="12" count="3" type="stmt"/>
+        <line num="15" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="19" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="20" count="2" type="stmt"/>
+        <line num="23" count="3" type="stmt"/>
+        <line num="37" count="3" type="stmt"/>
+        <line num="40" count="2" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="virtualweb-server.controllers.User">
+      <metrics statements="26" coveredstatements="25" conditionals="16" coveredconditionals="16" methods="2" coveredmethods="2"/>
+      <file name="index.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/User/index.js">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="5" type="stmt"/>
+      </file>
+      <file name="login.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/User/login.js">
+        <metrics statements="16" coveredstatements="15" conditionals="8" coveredconditionals="8" methods="1" coveredmethods="1"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="2" count="5" type="stmt"/>
+        <line num="4" count="5" type="stmt"/>
+        <line num="5" count="6" type="stmt"/>
+        <line num="6" count="6" type="stmt"/>
+        <line num="7" count="6" type="cond" truecount="4" falsecount="0"/>
+        <line num="9" count="3" type="stmt"/>
+        <line num="10" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="14" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+      </file>
+      <file name="register.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/User/register.js">
+        <metrics statements="9" coveredstatements="9" conditionals="8" coveredconditionals="8" methods="1" coveredmethods="1"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="2" count="5" type="stmt"/>
+        <line num="4" count="5" type="stmt"/>
+        <line num="5" count="7" type="stmt"/>
+        <line num="6" count="7" type="stmt"/>
+        <line num="7" count="7" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="21" count="6" type="stmt"/>
+      </file>
+    </package>
+    <package name="virtualweb-server.controllers.Wedding">
+      <metrics statements="44" coveredstatements="42" conditionals="44" coveredconditionals="42" methods="4" coveredmethods="4"/>
+      <file name="createWeddingPlan.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Wedding/createWeddingPlan.js">
+        <metrics statements="15" coveredstatements="15" conditionals="22" coveredconditionals="21" methods="1" coveredmethods="1"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="2" count="5" type="stmt"/>
+        <line num="4" count="5" type="stmt"/>
+        <line num="5" count="10" type="stmt"/>
+        <line num="6" count="10" type="stmt"/>
+        <line num="7" count="10" type="stmt"/>
+        <line num="10" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="11" count="8" type="stmt"/>
+        <line num="14" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="15" count="8" type="stmt"/>
+        <line num="18" count="10" type="stmt"/>
+        <line num="30" count="10" type="stmt"/>
+        <line num="31" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="47" count="9" type="stmt"/>
+      </file>
+      <file name="deleteWeddingPlan.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Wedding/deleteWeddingPlan.js">
+        <metrics statements="7" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="3" count="5" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+      </file>
+      <file name="getWeddingInfoById.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Wedding/getWeddingInfoById.js">
+        <metrics statements="7" coveredstatements="6" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="3" count="5" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="10" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="12" count="0" type="stmt"/>
+      </file>
+      <file name="index.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Wedding/index.js">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="5" type="stmt"/>
+      </file>
+      <file name="updateWeddingPlan.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/controllers/Wedding/updateWeddingPlan.js">
+        <metrics statements="14" coveredstatements="14" conditionals="20" coveredconditionals="20" methods="1" coveredmethods="1"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="2" count="5" type="stmt"/>
+        <line num="4" count="5" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="6" count="3" type="stmt"/>
+        <line num="7" count="3" type="stmt"/>
+        <line num="10" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="14" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="15" count="2" type="stmt"/>
+        <line num="18" count="3" type="stmt"/>
+        <line num="28" count="3" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
       </file>
     </package>
     <package name="virtualweb-server.helpers">
@@ -269,8 +380,8 @@
         <line num="5" count="8" type="stmt"/>
         <line num="6" count="8" type="stmt"/>
         <line num="9" count="5" type="stmt"/>
-        <line num="10" count="61" type="stmt"/>
-        <line num="11" count="60" type="stmt"/>
+        <line num="10" count="64" type="stmt"/>
+        <line num="11" count="63" type="stmt"/>
         <line num="14" count="5" type="stmt"/>
       </file>
       <file name="midtrans.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/helpers/midtrans.js">
@@ -330,48 +441,48 @@
         <metrics statements="48" coveredstatements="45" conditionals="16" coveredconditionals="16" methods="4" coveredmethods="4"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
-        <line num="5" count="73" type="stmt"/>
-        <line num="6" count="73" type="stmt"/>
-        <line num="7" count="73" type="cond" truecount="2" falsecount="0"/>
+        <line num="5" count="76" type="stmt"/>
+        <line num="6" count="76" type="stmt"/>
+        <line num="7" count="76" type="cond" truecount="2" falsecount="0"/>
         <line num="8" count="12" type="stmt"/>
-        <line num="10" count="61" type="stmt"/>
-        <line num="11" count="60" type="stmt"/>
-        <line num="14" count="60" type="cond" truecount="2" falsecount="0"/>
+        <line num="10" count="64" type="stmt"/>
+        <line num="11" count="63" type="stmt"/>
+        <line num="14" count="63" type="cond" truecount="2" falsecount="0"/>
         <line num="15" count="13" type="stmt"/>
-        <line num="17" count="47" type="stmt"/>
-        <line num="18" count="47" type="stmt"/>
+        <line num="17" count="50" type="stmt"/>
+        <line num="18" count="50" type="stmt"/>
         <line num="22" count="1" type="stmt"/>
         <line num="26" count="5" type="stmt"/>
-        <line num="27" count="10" type="stmt"/>
-        <line num="28" count="10" type="stmt"/>
-        <line num="29" count="10" type="stmt"/>
-        <line num="30" count="10" type="stmt"/>
-        <line num="33" count="10" type="cond" truecount="2" falsecount="0"/>
-        <line num="34" count="7" type="cond" truecount="2" falsecount="0"/>
-        <line num="35" count="4" type="stmt"/>
+        <line num="27" count="11" type="stmt"/>
+        <line num="28" count="11" type="stmt"/>
+        <line num="29" count="11" type="stmt"/>
+        <line num="30" count="11" type="stmt"/>
+        <line num="33" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="34" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="35" count="5" type="stmt"/>
         <line num="37" count="3" type="stmt"/>
         <line num="40" count="3" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
         <line num="47" count="5" type="stmt"/>
-        <line num="48" count="10" type="stmt"/>
-        <line num="49" count="10" type="stmt"/>
-        <line num="50" count="10" type="stmt"/>
-        <line num="51" count="10" type="stmt"/>
-        <line num="54" count="10" type="cond" truecount="2" falsecount="0"/>
-        <line num="55" count="8" type="cond" truecount="2" falsecount="0"/>
-        <line num="56" count="6" type="stmt"/>
+        <line num="48" count="12" type="stmt"/>
+        <line num="49" count="12" type="stmt"/>
+        <line num="50" count="12" type="stmt"/>
+        <line num="51" count="12" type="stmt"/>
+        <line num="54" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="55" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="56" count="8" type="stmt"/>
         <line num="58" count="2" type="stmt"/>
         <line num="61" count="2" type="stmt"/>
         <line num="64" count="0" type="stmt"/>
         <line num="68" count="5" type="stmt"/>
-        <line num="69" count="4" type="stmt"/>
-        <line num="70" count="4" type="stmt"/>
-        <line num="71" count="4" type="stmt"/>
-        <line num="72" count="4" type="stmt"/>
-        <line num="75" count="4" type="stmt"/>
-        <line num="78" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="79" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="80" count="2" type="stmt"/>
+        <line num="69" count="5" type="stmt"/>
+        <line num="70" count="5" type="stmt"/>
+        <line num="71" count="5" type="stmt"/>
+        <line num="72" count="5" type="stmt"/>
+        <line num="75" count="5" type="stmt"/>
+        <line num="78" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="79" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="80" count="3" type="stmt"/>
         <line num="82" count="1" type="stmt"/>
         <line num="85" count="1" type="stmt"/>
         <line num="88" count="0" type="stmt"/>
@@ -380,11 +491,11 @@
       <file name="errorHandler.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/middlewares/errorHandler.js">
         <metrics statements="25" coveredstatements="25" conditionals="10" coveredconditionals="10" methods="4" coveredmethods="4"/>
         <line num="1" count="5" type="stmt"/>
-        <line num="2" count="74" type="stmt"/>
-        <line num="3" count="65" type="stmt"/>
-        <line num="9" count="74" type="cond" truecount="10" falsecount="0"/>
-        <line num="11" count="33" type="stmt"/>
-        <line num="12" count="18" type="stmt"/>
+        <line num="2" count="77" type="stmt"/>
+        <line num="3" count="68" type="stmt"/>
+        <line num="9" count="77" type="cond" truecount="10" falsecount="0"/>
+        <line num="11" count="46" type="stmt"/>
+        <line num="12" count="21" type="stmt"/>
         <line num="14" count="1" type="stmt"/>
         <line num="15" count="1" type="stmt"/>
         <line num="17" count="1" type="stmt"/>
@@ -492,14 +603,14 @@
         <line num="14" count="5" type="stmt"/>
         <line num="15" count="5" type="stmt"/>
         <line num="18" count="5" type="stmt"/>
-        <line num="30" count="12" type="stmt"/>
-        <line num="31" count="12" type="stmt"/>
-        <line num="32" count="12" type="stmt"/>
-        <line num="33" count="12" type="stmt"/>
-        <line num="35" count="12" type="stmt"/>
-        <line num="37" count="12" type="stmt"/>
-        <line num="38" count="12" type="stmt"/>
-        <line num="40" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="30" count="13" type="stmt"/>
+        <line num="31" count="13" type="stmt"/>
+        <line num="32" count="13" type="stmt"/>
+        <line num="33" count="13" type="stmt"/>
+        <line num="35" count="13" type="stmt"/>
+        <line num="37" count="13" type="stmt"/>
+        <line num="38" count="13" type="stmt"/>
+        <line num="40" count="13" type="cond" truecount="2" falsecount="0"/>
         <line num="41" count="1" type="stmt"/>
         <line num="82" count="5" type="stmt"/>
       </file>
@@ -562,10 +673,10 @@
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
-        <line num="4" count="5" type="stmt"/>
+        <line num="3" count="5" type="stmt"/>
+        <line num="5" count="5" type="stmt"/>
         <line num="6" count="5" type="stmt"/>
-        <line num="7" count="5" type="stmt"/>
-        <line num="10" count="5" type="stmt"/>
+        <line num="9" count="5" type="stmt"/>
       </file>
       <file name="invitationforguest.js" path="/media/naughtymask/LinuxFile/Hacktiv8/p3/final-project/virtualweb-server/routes/invitationforguest.js">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
