@@ -38,7 +38,7 @@ const sendToUser = (name, email) => {
 }
 
 const sendToGuest = ( guest, guestEmail, bride, groom, date, guestId ) => {
-  const baseUrl = 'https://undanganku-id.web.app/'
+  const baseUrl = 'https://undanganku-id.web.app'
   const formatDate = moment(date).format("dddd, MMMM Do, YYYY")
   const output = guestConfirm( guest, bride, groom, formatDate, baseUrl, guestId )
   
