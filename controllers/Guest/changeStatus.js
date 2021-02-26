@@ -12,7 +12,7 @@ module.exports = async (req, res, next) => {
       const { email, UserId } = hasGuest
       const findWeds = await Wedding.findOne({ where: { UserId } })
       const findInvt = await Invitation.findOne({ where: { WeddingId: findWeds.id } })
-      if (status === true) await sendEventLink(findWeds.brideName, findWeds.groomName, email, findInvt.id)
+      if (status == 'true') await sendEventLink(findWeds.brideName, findWeds.groomName, email, findInvt.id)
       const guest = await Guest.update({
         status
       }, {
