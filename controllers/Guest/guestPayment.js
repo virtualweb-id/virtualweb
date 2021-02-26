@@ -1,7 +1,7 @@
 const { snap } = require('../../helpers')
 
 module.exports = async (req, res, next) => {
-  const { firstName, lastName, email, phone, amount } = req.body
+  const { firstName, lastName, email, phone, amount } = req.body.inputData
     try {
       let parameter = {
         'transaction_details': {
